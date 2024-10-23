@@ -1,0 +1,24 @@
+::ng-deep .p-breadcrumb {
+    background-color: transparent !important; /* Removes background */
+    border: none !important;                  /* Removes border */
+    padding: 0 !important;                    /* Removes padding */
+    box-shadow: none !important;              /* Removes any shadow */
+}
+
+::ng-deep .p-breadcrumb .p-menuitem-link {
+    color: #007ad9; /* Customize the breadcrumb link color */
+    font-weight: 500; /* Optional: Make the text bold */
+}
+
+::ng-deep .p-breadcrumb .p-menuitem-text {
+    color: #333; /* Customize the breadcrumb text color */
+}
+
+::ng-deep .p-breadcrumb .p-breadcrumb-chevron {
+    color: #999; /* Customize the separator (>) color */
+}
+
+::ng-deep .p-breadcrumb .p-menuitem-link:hover {
+    text-decoration: underline; /* Optional: Underline on hover */
+    color: #005bb5; /* Change color on hover */
+}

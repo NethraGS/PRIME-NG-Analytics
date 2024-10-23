@@ -7,7 +7,8 @@
                   <div class="text-900 font-medium text-xl">1,520</div>
               </div>
               <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                  <i class="pi pi-lightbulb text-blue-500 text-xl"></i>
+                  <i class="pi pi-sun
+                  text-blue-500 text-xl"></i>
               </div>
           </div>
           <span class="text-green-500 font-medium">15 new </span>
@@ -23,7 +24,7 @@
                   <div class="text-900 font-medium text-xl">3,200 kWh</div>
               </div>
               <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                  <i class="pi pi-solar text-orange-500 text-xl"></i>
+                  <i class="pi pi-bolt text-orange-500 text-xl"></i>
               </div>
           </div>
           <span class="text-green-500 font-medium">%10+ </span>
@@ -81,7 +82,10 @@
                       <td>{{record.date | date:'shortDate'}}</td>
                       <td>{{record.status}}</td>
                       <td>
-                          <button pButton pRipple type="button" icon="pi pi-eye" class="p-button-rounded p-button-text"></button>
+                          
+                          <button pbutton="" pripple="" type="button" icon="pi pi-search" class="p-element p-button p-component p-button-text p-button-icon-only"><span class="p-button-icon pi pi-search" aria-hidden="true"></span></button>
+
+
                       </td>
                   </tr>
               </ng-template>

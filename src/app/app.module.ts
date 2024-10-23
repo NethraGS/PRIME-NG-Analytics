@@ -22,6 +22,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { ChartModule } from 'primeng/chart';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 @NgModule({
     declarations: [
         AppComponent,
@@ -33,7 +34,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         DialogModule,
         ChartModule,
         HttpClientModule,
-        DynamicDialogModule,
+        DynamicDialogModule,BreadcrumbModule,
         FullCalendarModule,ContextMenuModule
     ],
     providers: [

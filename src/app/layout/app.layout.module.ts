@@ -21,13 +21,14 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import {  BreadcrumbModule } from 'primeng/breadcrumb';
 
 import { MenubarModule } from 'primeng/menubar';
+import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 @NgModule({
     declarations: [
         AppMenuitemComponent,
         AppTopBarComponent,
         AppFooterComponent,
         AppSidebarComponent,
-        AppLayoutComponent,AppMenuComponent
+        AppMenuComponent,BreadcrumbComponent,AppLayoutComponent
     ],
     imports: [
         BrowserModule,ContextMenuModule,BreadcrumbModule,
