@@ -1,0 +1,55 @@
+.dimming-schedules-container {
+    padding: 1em;
+
+    h2 {
+        text-align: center;
+    }
+
+    .header-container {
+        display: flex;
+        justify-content: flex-end; 
+        margin-bottom: 1em; 
+        margin-right: 1em;
+    }
+
+    .add-button {
+        margin-bottom: 1em;
+    }
+
+    .form-group {
+        margin-bottom: 1em;
+    }
+
+    .view-button,
+    .edit-button,
+    .delete-button {
+        margin-right: 0.5em;
+    }
+
+    .save-button {
+        display: block;
+        margin: 1em auto;
+    }
+
+   
+    table.p-datatable {
+        width: 85%; // Set the table width to a percentage of the container
+        max-width: 800px; // Optional: set a maximum width for larger screens
+        margin: 0 auto; // Center the table in the container
+        border-collapse: collapse;
+
+        th, td {
+            padding: 0.5em;
+            text-align: left; // Aligns text to the left
+        }
+
+        th {
+            background-color: #f4f4f4; // Adds a background color to the header
+            border-bottom: 2px solid #ccc; // Adds a bottom border
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; // Alternates row colors for better readability
+        }
+    }
+}

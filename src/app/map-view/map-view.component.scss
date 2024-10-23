@@ -1,0 +1,31 @@
+.map-wrap {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 150px); /* Adjust the height as needed */
+}
+
+.map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.watermark {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 999;
+}
+
+.watermark img {
+  width: 100px;
+}
+
+/* Optional: Style for status indicators */
+.on {
+  color: #00FF00; /* Green for On */
+}
+
+.off {
+  color: #FF0000; /* Red for Off */
+}

@@ -1,0 +1,16 @@
+<p-dialog 
+  [header]="light.name" 
+  [visible]="true" 
+  [modal]="true" 
+  [closable]="false"
+  [style]="{ width: '300px' }">
+
+  <div *ngIf="light">
+    <p>Status: {{ light.status ? 'On' : 'Off' }}</p>
+  </div>
+  
+  <p-footer>
+    <button pButton label="Toggle Light" (click)="toggleLight()"></button>
+    <button pButton label="Close" (click)="ref.close()"></button>
+  </p-footer>
+</p-dialog>

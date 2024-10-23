@@ -1,0 +1,47 @@
+<!-- Menubar -->
+<p-menubar [model]="model"></p-menubar>
+
+<!-- Breadcrumb with custom styling -->
+<p-breadcrumb [model]="breadcrumbItems" styleClass="my-breadcrumb"></p-breadcrumb>
+
+<!-- Sidebar-like Menu structure -->
+<ul class="layout-menu" #menu>
+    <ng-container *ngFor="let item of model; let i = index;">
+        <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true">
+            <ng-container *ngIf="!item.items">
+                <!-- Single level menu item -->
+                <a [routerLink]="item.routerLink" pRipple (contextmenu)="onRightClick($event, item)">
+                    <i [ngClass]="item.icon"></i>
+                    <span>{{ item.label }}</span>
+                </a>
+            </ng-container>
+
+            <ng-container *ngIf="item.items">
+                <!-- Parent item with nested items -->
+                <a (click)="item.label === 'Scheduler' ? isSchedulerOpen = !isSchedulerOpen : isAssetsOpen = !isAssetsOpen" pRipple>
+                    <i [ngClass]="item.icon"></i>
+                    <span>{{ item.label }}</span>
+                    <!-- Toggle icon based on open/close state -->
+                    <i class="pi pi-fw" [ngClass]="item.label === 'Scheduler' ? (isSchedulerOpen ? 'pi-angle-up' : 'pi-angle-down') : (isAssetsOpen ? 'pi-angle-up' : 'pi-angle-down')"></i>
+                </a>
+                <!-- Child items -->
+                <ul *ngIf="item.label === 'Scheduler' ? isSchedulerOpen : isAssetsOpen">
+                    <li *ngFor="let subItem of item.items">
+                        <a [routerLink]="subItem.routerLink" pRipple (contextmenu)="onRightClick($event, subItem)">
+                            <i [ngClass]="subItem.icon"></i>
+                            <span>{{ subItem.label }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </ng-container>
+        </li>
+        <!-- Separator if defined in the menu model -->
+        <li *ngIf="item.separator" class="menu-separator"></li>
+    </ng-container>
+
+    <!-- Context Menu for Right-click functionality -->
+    <p-contextMenu #contextMenu [model]="contextMenuItems"></p-contextMenu>
+</ul>
+
+<!-- Router outlet for rendering components dynamically -->
+<router-outlet></router-outlet>

@@ -1,0 +1,132 @@
+.dimming-profiles-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+
+  .profiles-sidebar {
+    flex: 0 0 700px; 
+    margin-right: 10px;
+  }
+
+  .profile-list {
+    margin-top: 10px;
+
+    .profile-item {
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #e9e9e9;
+      }
+    }
+  }
+
+  .profile-details {
+    flex: 1;
+
+    .form-group {
+      margin-bottom: 20px;
+
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+      }
+    }
+
+    .p-datatable {
+      margin-top: 20px;
+
+      th {
+        background-color: #f0f0f0;
+      }
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+
+      p-button {
+        flex: 1;
+        margin-right: 10px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+.form-table {
+  width: 100%;
+  border-spacing: 10px;
+}
+
+.form-table td {
+  padding: 8px;
+}
+
+.button-group {
+  margin-top: 20px;
+}
+
+.profiles-list {
+  margin-top: 30px;
+}
+
+.profiles-list .p-table {
+  width: 100%;
+}
+
+.profile-details {
+  max-width: 100%;
+  padding: 1rem;
+}
+
+.profile-heading {
+  margin-bottom: 0.5rem;
+}
+
+.compact-form {
+  width: 100%;
+  td {
+    padding: 0.2rem 0.5rem;
+  }
+  label {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+  }
+  input,
+  p-dropdown {
+    width: 100%;
+    font-size: 0.85rem;
+  }
+}
+
+.button-group {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.compact-table th,
+.compact-table td {
+  padding: 0.5rem 0.75rem;
+}
+
+.compact-table {
+  th {
+    font-size: 0.9rem;
+  }
+  td {
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,15 @@
+.layout-main-container {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    padding: 4rem 2rem 2rem 4rem;
+    transition: margin-left $transitionDuration;
+    width: calc(100vw - 5rem) ;
+
+}
+
+.layout-main {
+    flex: 1 1 auto;
+}

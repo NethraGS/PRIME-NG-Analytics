@@ -1,0 +1,54 @@
+<div class="dimming-schedules-container">
+  <h2>Dimming Schedules</h2>
+
+  <p-button label="Add New Schedule" (click)="toggleSidebar()" class="add-button"></p-button>
+
+  <p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" position="right" [style]="{'width':'400px'}">
+    <h3>{{ isEditing ? 'Edit Schedule' : 'Add New Schedule' }}</h3>
+    <div class="form-group">
+      <label for="profile">Select Profile</label>
+      <p-dropdown id="profile" [options]="profileOptions" [(ngModel)]="selectedProfile" placeholder="Select Profile" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start Date</label>
+      <p-calendar [(ngModel)]="newSchedule.startDate" showIcon="true"></p-calendar>
+    </div>
+    <div class="form-group">
+      <label for="endDate">End Date</label>
+      <p-calendar [(ngModel)]="newSchedule.endDate" showIcon="true"></p-calendar>
+    </div>
+    <div class="form-group">
+      <label for="frequency">Frequency</label>
+      <p-dropdown id="frequency" [options]="frequencyOptions" [(ngModel)]="newSchedule.frequency" placeholder="Select Frequency" [showClear]="true"></p-dropdown>
+    </div>
+    <p-button label="{{ isEditing ? 'Update Schedule' : 'Add Schedule' }}" (click)="addOrEditSchedule()" class="add-button"></p-button>
+  </p-sidebar>
+
+  <table class="p-datatable">
+    <thead>
+      <tr>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Frequency</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let schedule of schedules">
+        <td>{{ schedule.startDate | date: 'longDate' }}</td>
+        <td>{{ schedule.endDate | date: 'longDate' }}</td>
+        <td>{{ schedule.frequency }}</td>
+        <td>
+          <p-dialog header="Dimming Schedule Calendar" [(visible)]="calendarVisible" [modal]="true" [style]="{width: '70vw'}" [closable]="true">
+            <full-calendar [options]="calendarOptions"></full-calendar>
+          </p-dialog>          
+          <p-button icon="pi pi-calendar-plus" (click)="viewCalendar()" class="view-button"></p-button>
+          <p-button icon="pi pi-pencil" (click)="toggleSidebar(schedule)" class="edit-button"></p-button>
+          <p-button icon="pi pi-trash" (click)="removeSchedule(schedule)" class="delete-button"></p-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  
+</div>

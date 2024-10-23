@@ -1,0 +1,120 @@
+<div class="dimming-profiles-container">
+  <!-- Add New Profile Button -->
+  <div class="button-group">
+    <p-button label="Add New Profile" icon="pi pi-plus" (click)="showSidebar()"></p-button>
+  </div>
+
+  <!-- Table for displaying profiles -->
+  <div class="profiles-list p-mt-4">
+    <h3>Dimming Profiles</h3>
+    <p-table [value]="dimmingProfiles" responsiveLayout="scroll" class="compact-table">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Profile Name</th>
+          <th>Profile Type</th>
+          <th>Start Time Lamp Level</th>
+          <th>Motion/Photocell Start</th>
+          <th>Sunrise Lamp Level</th>
+          <th>Motion/Photocell Sunrise</th>
+          <th>Sunset Lamp Level</th>
+          <th>Motion/Photocell Sunset</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-profile>
+        <tr>
+          <td>{{ profile.profileName }}</td>
+          <td>{{ profile.profileType }}</td>
+          <td>{{ profile.startTimeLampLevel }}</td>
+          <td>{{ profile.motionOrPhotocellStart }}</td>
+          <td>{{ profile.sunriseLampLevel }}</td>
+          <td>{{ profile.motionOrPhotocellSunrise }}</td>
+          <td>{{ profile.sunsetLampLevel }}</td>
+          <td>{{ profile.motionOrPhotocellSunset }}</td>
+          <td>
+            <p-button label="" icon="pi pi-pencil" (click)="editProfile(profile)"></p-button>
+            <p-button label="" icon="pi pi-trash" (click)="deleteProfile(profile.id)" class="p-button-danger"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Sidebar Form -->
+  <p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" position="right" [style]="{'width':'50%'}">
+    <div class="profile-details">
+      <h3 class="profile-heading">{{ newProfile.id ? 'Edit Profile' : 'Add New Profile' }}</h3>
+
+      <!-- Profile Form -->
+      <table class="form-table compact-form">
+        <tr>
+          <td><label for="profileName">Profile Name*</label></td>
+          <td><input id="profileName" type="text" pInputText [(ngModel)]="newProfile.profileName" /></td>
+        </tr>
+        <tr>
+          <td><label for="profileType">Profile Type</label></td>
+          <td>
+            <p-dropdown
+              id="profileType"
+              [options]="profileTypes"
+              [(ngModel)]="newProfile.profileType"
+              placeholder="Select a Profile Type"
+              [showClear]="true"
+            ></p-dropdown>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="startTimeLampLevel">Start Time Lamp Level*</label></td>
+          <td><input id="startTimeLampLevel" type="text" pInputText [(ngModel)]="newProfile.startTimeLampLevel" /></td>
+        </tr>
+        <tr>
+          <td><label for="motionOrPhotocellStart">Motion or Photocell Start*</label></td>
+          <td>
+            <p-dropdown
+              id="motionOrPhotocellStart"
+              [options]="[{ label: 'Motion', value: 'Motion' }, { label: 'Photocell', value: 'Photocell' }]"
+              [(ngModel)]="newProfile.motionOrPhotocellStart"
+              placeholder="Select an option"
+            ></p-dropdown>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="sunriseLampLevel">Sunrise Lamp Level*</label></td>
+          <td><input id="sunriseLampLevel" type="text" pInputText [(ngModel)]="newProfile.sunriseLampLevel" /></td>
+        </tr>
+        <tr>
+          <td><label for="motionOrPhotocellSunrise">Motion or Photocell Sunrise*</label></td>
+          <td>
+            <p-dropdown
+              id="motionOrPhotocellSunrise"
+              [options]="[{ label: 'Motion', value: 'Motion' }, { label: 'Photocell', value: 'Photocell' }]"
+              [(ngModel)]="newProfile.motionOrPhotocellSunrise"
+              placeholder="Select an option"
+            ></p-dropdown>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="sunsetLampLevel">Sunset Lamp Level*</label></td>
+          <td><input id="sunsetLampLevel" type="text" pInputText [(ngModel)]="newProfile.sunsetLampLevel" /></td>
+        </tr>
+        <tr>
+          <td><label for="motionOrPhotocellSunset">Motion or Photocell Sunset*</label></td>
+          <td>
+            <p-dropdown
+              id="motionOrPhotocellSunset"
+              [options]="[{ label: 'Motion', value: 'Motion' }, { label: 'Photocell', value: 'Photocell' }]"
+              [(ngModel)]="newProfile.motionOrPhotocellSunset"
+              placeholder="Select an option"
+            ></p-dropdown>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <p-button label="Reset" (click)="resetProfile()" class="p-button-secondary"></p-button>
+        <p-button label="Save Profile" (click)="saveProfile()"></p-button>
+      </div>
+    </div>
+  </p-sidebar>
+</div>
