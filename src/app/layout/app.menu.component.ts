@@ -2,17 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
 import { MenuItem } from 'primeng/api';
 import { ContextMenu } from 'primeng/contextmenu';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-menu',
     templateUrl: './app.menu.component.html',
 })
 export class AppMenuComponent implements OnInit {
-    model: MenuItem[] = [];            // Menubar items
-    breadcrumbItems: MenuItem[] = [];  // Breadcrumb items
-
-    isSchedulerOpen: boolean = false;  
-    isAssetsOpen: boolean = false;     
+    model: MenuItem[] = [];
+    breadcrumbItems: MenuItem[] = [];
+    isSchedulerOpen: boolean = false;
+    isAssetsOpen: boolean = false;
     contextMenuItems: MenuItem[] = [];
 
     sidebarVisible: boolean = false;
@@ -20,7 +21,7 @@ export class AppMenuComponent implements OnInit {
 
     @ViewChild('contextMenu') contextMenu!: ContextMenu;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService, private router: Router) { }
 
     ngOnInit() {
         // Menubar items
@@ -77,14 +78,41 @@ export class AppMenuComponent implements OnInit {
         ];
 
         // Initial breadcrumb
-        this.breadcrumbItems = [
-            { label: 'Home', routerLink: ['/dashboard'] }
-        ];
+        this.breadcrumbItems = [{ label: 'Home', routerLink: ['/dashboard'] }];
+
+        // Subscribe to route changes to update breadcrumb dynamically
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationEnd)
+        ).subscribe((event: any) => {
+            this.updateBreadcrumb(event.urlAfterRedirects);
+        });
+    }
+
+    // Function to update breadcrumb based on the route
+    updateBreadcrumb(url: string) {
+        this.breadcrumbItems = [{ label: 'Home', routerLink: ['/dashboard'] }];
+
+        if (url.includes('/mapview')) {
+            this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/mapview'] });
+            this.breadcrumbItems.push({ label: 'MapView', routerLink: ['/mapview'] });
+        } else if (url.includes('/scheduler')) {
+            this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/scheduler'] });
+            if (url.includes('/dimming-profiles')) {
+                this.breadcrumbItems.push({ label: 'Scheduler', routerLink: ['/scheduler'] });
+                this.breadcrumbItems.push({ label: 'Dimming Profiles', routerLink: ['/scheduler/dimming-profiles'] });
+            } else if (url.includes('/dimming-schedules')) {
+                this.breadcrumbItems.push({ label: 'Scheduler', routerLink: ['/scheduler'] });
+                this.breadcrumbItems.push({ label: 'Dimming Schedules', routerLink: ['/scheduler/dimming-schedules'] });
+            }
+        } else if (url.includes('/charts')) {
+            this.breadcrumbItems.push({ label: 'Others', routerLink: ['/charts'] });
+            this.breadcrumbItems.push({ label: 'Charts', routerLink: ['/charts'] });
+        }
     }
 
     // Handle right-click context menu
     onRightClick(event: MouseEvent, item: any) {
-        event.preventDefault();  
+        event.preventDefault();
 
         if (item.label === 'Dimming Profiles') {
             this.contextMenuItems = [

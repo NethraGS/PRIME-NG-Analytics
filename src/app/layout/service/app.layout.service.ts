@@ -1,6 +1,6 @@
 import { Injectable, effect, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { MenubarModule } from 'primeng/menubar';
+
 export interface AppConfig {
     inputStyle: string;
     colorScheme: string;

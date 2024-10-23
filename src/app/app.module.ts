@@ -20,8 +20,8 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { ChartsDemoComponent } from './demo/components/uikit/charts/chartsdemo.component';
 import { MenubarModule } from 'primeng/menubar';
 import { ChartModule } from 'primeng/chart';
-
-
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
     declarations: [
         AppComponent,
@@ -29,7 +29,7 @@ import { ChartModule } from 'primeng/chart';
         StreetlightDialogComponent,ChartsDemoComponent
     ],
     imports: [
-        AppRoutingModule,ContextMenuModule,MenubarModule,
+        AppRoutingModule,ContextMenuModule,MenubarModule,BrowserModule,BrowserAnimationsModule,
         DialogModule,
         ChartModule,
         HttpClientModule,
