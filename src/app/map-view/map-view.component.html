@@ -4,3 +4,37 @@
     <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
   </a>
 </div>
+
+<!-- Custom right-click context menu -->
+<div
+  *ngIf="contextMenuVisible"
+  class="context-menu"
+  [style.top]="contextMenuPosition.y"
+  [style.left]="contextMenuPosition.x"
+  (click)="closeContextMenu()"
+>
+  <ul>
+    <li><strong>{{ selectedMarkerDetails?.name }}</strong></li>
+    <button (click)="viewDetails()">View Details</button>
+  </ul>
+</div>
+
+<!-- Sidebar for viewing streetlight details -->
+<div class="sidebar" [class.open]="sidebarVisible">
+  <img src="assets/light.png" alt="Company Logo" class="sidebar-logo" />
+  <h3>{{ selectedMarkerDetails?.name }} Details</h3>
+  <p><strong>Type:</strong> {{ selectedMarkerDetails?.type }}</p>
+  <p><strong>Coordinates:</strong> [{{ selectedMarkerDetails?.coordinates[0].toFixed(4) }}, {{ selectedMarkerDetails?.coordinates[1].toFixed(4) }}]</p>
+  <p><strong>Status:</strong> {{ selectedMarkerDetails?.status ? 'On' : 'Off' }}</p>
+  <p><strong>Power Consumption:</strong> {{ selectedMarkerDetails?.powerConsumption }} Watts</p>
+  <p><strong>Brightness Level:</strong> {{ selectedMarkerDetails?.brightness }}</p>
+  <p><strong>Operational Time:</strong> {{ selectedMarkerDetails?.operationalTime }}</p>
+  <p><strong>Last Maintenance Date:</strong> {{ selectedMarkerDetails?.lastMaintenance }}</p>
+  <p><strong>Failures/Issues Log:</strong> {{ selectedMarkerDetails?.issues.length ? selectedMarkerDetails?.issues.join(', ') : 'No issues recorded' }}</p>
+  
+  <button (click)="toggleLight()">{{ selectedMarkerDetails?.status ? 'Turn Off' : 'Turn On' }}</button>
+  
+ 
+  
+  <button (click)="closeSidebar()">Close</button>
+</div>

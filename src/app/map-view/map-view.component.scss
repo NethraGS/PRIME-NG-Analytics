@@ -21,11 +21,65 @@
   width: 100px;
 }
 
-/* Optional: Style for status indicators */
 .on {
   color: #00FF00; /* Green for On */
 }
 
 .off {
   color: #FF0000; /* Red for Off */
+}
+
+.context-menu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.context-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.context-menu li {
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+/* Sidebar for streetlight details */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: white;
+  border-left: 1px solid #ccc;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+  z-index: 2000;
+}
+
+.sidebar.open {
+  right: 0;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+}
+
+.sidebar button {
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.sidebar-logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
 }

@@ -1,17 +1,26 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { Map, NavigationControl, Marker, Popup } from 'maplibre-gl';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mapview',
   standalone: true,
+  imports: [CommonModule,FormsModule],
   templateUrl: 'map-view.component.html',
   styleUrls: ['map-view.component.scss']
 })
 export class MapviewComponent implements OnInit, AfterViewInit, OnDestroy {
   map!: Map;
+  contextMenuVisible = false;
+  contextMenuPosition = { x: '0px', y: '0px' };
+  selectedMarkerDetails: any = null;
+  sidebarVisible = false;
 
-  @ViewChild('map')
-  private mapContainer!: ElementRef<HTMLElement>;
+ 
+
+
+  @ViewChild('map') private mapContainer!: ElementRef<HTMLElement>;
 
   constructor() {}
 
@@ -31,17 +40,14 @@ export class MapviewComponent implements OnInit, AfterViewInit, OnDestroy {
     // Add navigation controls
     this.map.addControl(new NavigationControl(), 'top-right');
 
-    // Add markers with popups
+    // Add markers with popups and right-click menu
     this.addMarkers();
   }
 
   addMarkers() {
     const markers = [
-      { id: 1, name: 'Streetlight 1', coordinates: [80.2209, 13.0105], status: true, type: 'Single Pole' },
-      { id: 2, name: 'Streetlight 2', coordinates: [80.2150, 13.0050], status: false, type: 'Double Pole' },
-      { id: 3, name: 'Streetlight 3', coordinates: [80.2250, 13.0150], status: true, type: 'Single Pole' },
-      { id: 4, name: 'Streetlight 4', coordinates: [80.2300, 13.0200], status: false, type: 'Light Standard' },
-      { id: 5, name: 'Streetlight 5', coordinates: [80.2400, 13.0300], status: true, type: 'Single Pole' }
+      { id: 1, name: 'Streetlight 1', coordinates: [80.2209, 13.0105], status: true, type: 'Single Pole', powerConsumption: 50, brightness: 100, operationalTime: 'Operating since 2018', lastMaintenance: '2023-01-15', issues: [] },
+      // Add other markers similarly...
     ];
 
     markers.forEach(marker => {
@@ -57,14 +63,44 @@ export class MapviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
       const popup = new Popup()
         .setHTML(popupContent)
-        .setMaxWidth('150px'); // Set a maximum width for the popup
+        .setMaxWidth('150px'); 
 
-      // Set the marker color based on the status (Green for On, Red for Off)
-      new Marker({ color: marker.status ? '#00FF00' : '#FF0000' })
+      const markerElement = new Marker({ color: marker.status ? '#00FF00' : '#FF0000' })
         .setLngLat(marker.coordinates as [number, number])
         .setPopup(popup)
-        .addTo(this.map);
+        .addTo(this.map)
+        .getElement();
+
+      // Add right-click event listener for marker
+      markerElement.addEventListener('contextmenu', (event) => this.showContextMenu(event, marker));
     });
+  }
+
+  showContextMenu(event: MouseEvent, marker: any) {
+    event.preventDefault();
+    this.contextMenuVisible = true;
+    this.contextMenuPosition = { x: `${event.clientX}px`, y: `${event.clientY}px` };
+    this.selectedMarkerDetails = marker;
+  }
+
+  viewDetails() {
+    this.contextMenuVisible = false;
+    this.sidebarVisible = true;
+  }
+
+  toggleLight() {
+    // Logic to toggle streetlight status
+    this.selectedMarkerDetails.status = !this.selectedMarkerDetails.status;
+  }
+
+  
+
+  closeSidebar() {
+    this.sidebarVisible = false;
+  }
+
+  closeContextMenu() {
+    this.contextMenuVisible = false;
   }
 
   ngOnDestroy() {

@@ -32,6 +32,7 @@ export class BreadcrumbComponent implements OnInit {
       if (url.includes('/dashboard')) {
           // Home > Dashboard
           this.breadcrumbItems.push({ label: 'Home', routerLink: ['/dashboard'] });
+          
           this.breadcrumbItems.push({ label: 'Dashboard', routerLink: ['/dashboard'] });
       } else if (url.includes('/mapview')) {
           // Assets > MapView
