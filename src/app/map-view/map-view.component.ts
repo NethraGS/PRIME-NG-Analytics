@@ -3,11 +3,11 @@ import { Map, NavigationControl, Marker, Popup } from 'maplibre-gl';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { SidebarModule } from 'primeng/sidebar';
 @Component({
   selector: 'app-mapview',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,SidebarModule],
   templateUrl: 'map-view.component.html',
   styleUrls: ['map-view.component.scss']
 })

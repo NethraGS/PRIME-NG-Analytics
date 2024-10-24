@@ -13,10 +13,12 @@
   [style.left]="contextMenuPosition.x"
   (click)="closeContextMenu()"
 >
-  <ul>
-    <li><strong>{{ selectedMarkerDetails?.name }}</strong></li>
-    <button (click)="viewDetails()">View Details</button>
-  </ul>
+<ul>
+  <li><strong>{{ selectedMarkerDetails?.name }}</strong></li>
+  <p-button (click)="viewDetails()" class="custom-button">View Details</p-button>
+
+</ul>
+
 </div>
 
 <!-- Sidebar for viewing streetlight details -->
