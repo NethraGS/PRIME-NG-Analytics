@@ -24,7 +24,15 @@
   <img src="assets/light.png" alt="Company Logo" class="sidebar-logo" />
   <h3>{{ selectedMarkerDetails?.name }} Details</h3>
   <p><strong>Type:</strong> {{ selectedMarkerDetails?.type }}</p>
-  <p><strong>Coordinates:</strong> [{{ selectedMarkerDetails?.coordinates[0].toFixed(4) }}, {{ selectedMarkerDetails?.coordinates[1].toFixed(4) }}]</p>
+  <p>
+    <strong>Coordinates:</strong> 
+    <span *ngIf="selectedMarkerDetails?.coordinates && selectedMarkerDetails.coordinates.length > 1">
+      [{{ selectedMarkerDetails.coordinates[0]?.toFixed(4) }}, {{ selectedMarkerDetails.coordinates[1]?.toFixed(4) }}]
+    </span>
+    <span *ngIf="!selectedMarkerDetails?.coordinates || selectedMarkerDetails.coordinates.length <= 1">
+      Not available
+    </span>
+  </p>
   <p><strong>Status:</strong> {{ selectedMarkerDetails?.status ? 'On' : 'Off' }}</p>
   <p><strong>Power Consumption:</strong> {{ selectedMarkerDetails?.powerConsumption }} Watts</p>
   <p><strong>Brightness Level:</strong> {{ selectedMarkerDetails?.brightness }}</p>
@@ -33,8 +41,6 @@
   <p><strong>Failures/Issues Log:</strong> {{ selectedMarkerDetails?.issues.length ? selectedMarkerDetails?.issues.join(', ') : 'No issues recorded' }}</p>
   
   <button (click)="toggleLight()">{{ selectedMarkerDetails?.status ? 'Turn Off' : 'Turn On' }}</button>
-  
- 
   
   <button (click)="closeSidebar()">Close</button>
 </div>

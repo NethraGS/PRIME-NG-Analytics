@@ -1,7 +1,13 @@
 <div class="dimming-schedules-container">
   <h2>Dimming Schedules</h2>
 
-  <p-button label="Add New Schedule" (click)="toggleSidebar()" class="add-button"></p-button>
+  <p-button 
+  label="Add New Schedule" 
+  (click)="toggleSidebar()" 
+  class="add-button" 
+  style="margin: left 5rem; display: block; margin-bottom: 50px;">
+</p-button>
+
 
   <p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" position="right" [style]="{'width':'400px'}">
     <h3>{{ isEditing ? 'Edit Schedule' : 'Add New Schedule' }}</h3>
