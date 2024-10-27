@@ -1,3 +1,4 @@
+// src/app/login/login.component.ts
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; // For HTTP requests
 import { Router } from '@angular/router'; // For navigation
@@ -25,7 +26,11 @@ export class LoginComponent {
   password!: string;
   errorMessage: string = '';
 
-  constructor(private http: HttpClient, private router: Router, private userService: UserService) { }
+  constructor(
+    private http: HttpClient, 
+    private router: Router, 
+    private userService: UserService
+  ) { }
 
   onSignIn() {
     const loginData = {
@@ -37,8 +42,12 @@ export class LoginComponent {
     this.http.post('http://localhost:8080/api/login', loginData).subscribe(
       (response: any) => {
         console.log('Login successful:', response);
-        this.userService.userRole = response.role; // Set user role in the service
 
+        // Set userId and userRole in the service
+        this.userService.userId = response.userId; // Keep as string
+        this.userService.userRole = response.role;
+
+        // Navigate based on role
         if (response.role === 'ADMIN') {
           this.router.navigate(['/admin-dashboard']);
         } else {

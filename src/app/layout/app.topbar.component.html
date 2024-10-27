@@ -35,7 +35,7 @@
   
         <!-- Show User Profile for USER only -->
         <ng-container *ngIf="userRole === 'USER'">
-            <button class="p-link layout-topbar-button" [routerLink]="'/user-profile'" 
+            <button class="p-link layout-topbar-button" [routerLink]="'/user-profile/' + userId" 
                     pTooltip="User Profile" 
                     tooltipPosition="bottom">
                 <i class="pi pi-user-edit"></i>

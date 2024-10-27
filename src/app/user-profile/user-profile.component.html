@@ -1,0 +1,14 @@
+<!-- src/app/user-profile/user-profile.component.html -->
+<p-card header="User Profile">
+    <div class="profile-details" *ngIf="user">
+      <p><strong>Username:</strong> {{ user.username }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Phone:</strong> {{ user.phone }}</p>
+      <p><strong>Address:</strong> {{ user.address }}</p>
+      <p><strong>Location:</strong> {{ user.location }}</p>
+      <p><strong>Tenant ID:</strong> {{ user.tenantId }}</p>
+      <p><strong>Tenant Region:</strong> {{ user.tenantRegion }}</p>
+    </div>
+    <div *ngIf="!user">Loading user data...</div>
+  </p-card>
+  

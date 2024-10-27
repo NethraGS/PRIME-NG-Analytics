@@ -9,6 +9,7 @@ import { DimmingProfilesComponent } from './dimming-profiles/dimming-profiles.co
 import { DimmingSchedulesComponent } from './dimming-schedules/dimming-schedules.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ChartsDemoComponent } from './demo/components/uikit/charts/chartsdemo.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
     imports: [
@@ -31,6 +32,7 @@ import { ChartsDemoComponent } from './demo/components/uikit/charts/chartsdemo.c
                         ]
                     },
                     { path: 'charts', component: ChartsDemoComponent },
+                    { path: 'user-profile/:id', component: UserProfileComponent },
                 ]
             },
             // Additional Routes (Authentication, Landing, Not Found)
