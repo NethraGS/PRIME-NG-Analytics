@@ -1,0 +1,73 @@
+<p-tabView>
+    <!-- User Activity Dashboard Tab -->
+    <p-tabPanel header="User Activity Dashboard">
+      <h3>User Activity Dashboard</h3>
+      <div class="grid p-fluid">
+        <div class="col-12 lg:col-4">
+          <div class="card">
+            <h5>Page Visits</h5>
+            <p-chart type="bar" [data]="pageVisitsData" [options]="pageVisitsOptions"></p-chart>
+          </div>
+        </div>
+        <div class="col-12 lg:col-4">
+          <div class="card">
+            <h5>Time on Page</h5>
+            <p-chart type="line" [data]="timeOnPageData" [options]="timeOnPageOptions"></p-chart>
+          </div>
+        </div>
+        <div class="col-12 lg:col-4">
+          <div class="card">
+            <h5>Session Duration</h5>
+            <p-chart type="doughnut" [data]="sessionDurationData" [options]="sessionDurationOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+    </p-tabPanel>
+  
+    <!-- Demographic Analysis Tab -->
+    <p-tabPanel header="Demographic Analysis">
+      <h3>Demographic Analysis</h3>
+      <div class="card">
+        <h5>User Demographics</h5>
+        <p-chart type="pie" [data]="demographicData" [options]="demographicOptions"></p-chart>
+      </div>
+    </p-tabPanel>
+  
+    <!-- Behavior Trends Tab -->
+    <p-tabPanel header="Behavior Trends">
+      <h3>Behavior Trends</h3>
+      <div class="grid p-fluid">
+        <div class="col-12 lg:col-6">
+          <div class="card">
+            <h5>Peak Usage Periods</h5>
+            <p-chart type="bar" [data]="peakUsageData" [options]="peakUsageOptions"></p-chart>
+          </div>
+        </div>
+        <div class="col-12 lg:col-6">
+          <div class="card">
+            <h5>User Heatmap</h5>
+            <p-chart type="polarArea" [data]="heatmapData" [options]="heatmapOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+    </p-tabPanel>
+  
+    <!-- Success and Failure Status Tracking Tab -->
+    <p-tabPanel header="Task Status Tracking">
+      <h3>Task Success and Failure Tracking</h3>
+      <div class="grid p-fluid">
+        <div class="col-12 lg:col-6">
+          <div class="card">
+            <h5>Success Rates</h5>
+            <p-chart type="line" [data]="successRateData" [options]="successRateOptions"></p-chart>
+          </div>
+        </div>
+        <div class="col-12 lg:col-6">
+          <div class="card">
+            <h5>Failure Rates</h5>
+            <p-chart type="bar" [data]="failureRateData" [options]="failureRateOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+    </p-tabPanel>
+  </p-tabView>  

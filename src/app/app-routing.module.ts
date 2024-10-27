@@ -10,6 +10,7 @@ import { DimmingSchedulesComponent } from './dimming-schedules/dimming-schedules
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ChartsDemoComponent } from './demo/components/uikit/charts/chartsdemo.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 @NgModule({
     imports: [
@@ -23,7 +24,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
                     // Existing Routes for Demo Components
                     { path: 'dashboard', component: UserDashboardComponent },
                     { path: 'mapview', component: MapviewComponent },
-                    { path: 'admin-dashboard', component: AdminDashboardComponent }, // Add Admin Dashboard route
+                    { path: 'admin-dashboard', component: AdminDashboardComponent }, 
                     {
                         path: 'scheduler',
                         children: [
@@ -33,6 +34,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
                     },
                     { path: 'charts', component: ChartsDemoComponent },
                     { path: 'user-profile/:id', component: UserProfileComponent },
+                    { path: 'analytics', component: AnalyticsComponent }
                 ]
             },
             // Additional Routes (Authentication, Landing, Not Found)

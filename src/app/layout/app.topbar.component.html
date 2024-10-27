@@ -25,13 +25,14 @@
         
         <!-- Show Analytics Page for ADMIN only -->
         <ng-container *ngIf="userRole === 'ADMIN'">
-            <button class="p-link layout-topbar-button" [routerLink]="'/analytics'" 
-                    pTooltip="Analytics Page" 
+            <button class="p-link layout-topbar-button" [routerLink]="['/analytics']"
+                    pTooltip="Analytics Page"
                     tooltipPosition="bottom">
-                <i class="pi pi-chart-bar"></i>
-                <span>Analytics</span>
+              <i class="pi pi-chart-bar"></i>
+              <span>Analytics</span>
             </button>
-        </ng-container>
+          </ng-container>
+          
   
         <!-- Show User Profile for USER only -->
         <ng-container *ngIf="userRole === 'USER'">
