@@ -19,6 +19,7 @@ import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import { ContextMenuModule } from 'primeng/contextmenu';
 import {  BreadcrumbModule } from 'primeng/breadcrumb';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { MenubarModule } from 'primeng/menubar';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
@@ -31,7 +32,7 @@ import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
         AppMenuComponent,BreadcrumbComponent,AppLayoutComponent
     ],
     imports: [
-        BrowserModule,ContextMenuModule,BreadcrumbModule,
+        BrowserModule,ContextMenuModule,BreadcrumbModule,TooltipModule,
         FormsModule,
         HttpClientModule,
         BrowserAnimationsModule,MenubarModule,

@@ -2,43 +2,45 @@ import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { Router } from '@angular/router';
+import { UserService } from '../UserService';
+
+
 @Component({
-    selector: 'app-topbar',
-    templateUrl: './app.topbar.component.html'
+  selector: 'app-topbar',
+  templateUrl: './app.topbar.component.html'
 })
 export class AppTopBarComponent {
+  items!: MenuItem[];
+  isMenuOpen = false;
 
-    items!: MenuItem[];
+  @ViewChild('menubutton') menuButton!: ElementRef;
+  @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
+  @ViewChild('topbarmenu') menu!: ElementRef;
 
-    isMenuOpen = false;
+  userRole: string | null = null; // Allow userRole to be null
 
-    @ViewChild('menubutton') menuButton!: ElementRef;
+  constructor(public layoutService: LayoutService, private router: Router, private userService: UserService) {
+    this.userRole = this.userService.userRole; // Get user role from the service
+  }
 
-    @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen; // Toggle menu visibility
+  }
 
-    @ViewChild('topbarmenu') menu!: ElementRef;
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    const menuButton = document.querySelector('.layout-topbar-button');
+    const dropdownMenu = document.querySelector('.p-dropdown-menu');
 
-    constructor(public layoutService: LayoutService,private router: Router) { }
+    // Check if the click is outside the menu and the button
+    if (menuButton && dropdownMenu && !menuButton.contains(clickedElement) && !dropdownMenu.contains(clickedElement)) {
+      this.isMenuOpen = false;
+    }
+  }
 
-    toggleMenu() {
-        this.isMenuOpen = !this.isMenuOpen; // Toggle menu visibility
-      }
-
-      @HostListener('document:click', ['$event'])
-      handleClickOutside(event: MouseEvent) {
-        const clickedElement = event.target as HTMLElement;
-        const menuButton = document.querySelector('.layout-topbar-button');
-        const dropdownMenu = document.querySelector('.p-dropdown-menu');
-    
-        // Check if the click is outside the menu and the button
-        if (menuButton && dropdownMenu && !menuButton.contains(clickedElement) && !dropdownMenu.contains(clickedElement)) {
-          this.isMenuOpen = false;
-        }
-      }
-
-    logout() {
-    
-        // Redirect to login page
-        this.router.navigate(['/login']);
-      }
+  logout() {
+    //this.userService.userRole = null; // Clear the user role on logout
+    this.router.navigate(['/']);
+  }
 }

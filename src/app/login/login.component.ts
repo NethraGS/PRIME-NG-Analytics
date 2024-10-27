@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';  // For HTTP requests
-import { Router } from '@angular/router';  // For navigation
-import { PasswordModule } from 'primeng/password';  // PrimeNG password component
-import { FormsModule } from '@angular/forms';  // Forms module for two-way binding
-import { CommonModule } from '@angular/common';  // CommonModule for Angular directives
+import { HttpClient } from '@angular/common/http'; // For HTTP requests
+import { Router } from '@angular/router'; // For navigation
+import { PasswordModule } from 'primeng/password'; // PrimeNG password component
+import { FormsModule } from '@angular/forms'; // Forms module for two-way binding
+import { CommonModule } from '@angular/common'; // CommonModule for Angular directives
+import { UserService } from '../UserService';
 
 @Component({
   selector: 'app-login',
@@ -20,16 +21,15 @@ import { CommonModule } from '@angular/common';  // CommonModule for Angular dir
   `]
 })
 export class LoginComponent {
+  username!: string;
+  password!: string;
+  errorMessage: string = '';
 
-  username!: string;  
-  password!: string;  
-  errorMessage: string = ''; 
-
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private userService: UserService) { }
 
   onSignIn() {
     const loginData = {
-      username: this.username,  // Use 'username' as per your backend
+      username: this.username, // Use 'username' as per your backend
       password: this.password
     };
 
@@ -37,17 +37,17 @@ export class LoginComponent {
     this.http.post('http://localhost:8080/api/login', loginData).subscribe(
       (response: any) => {
         console.log('Login successful:', response);
+        this.userService.userRole = response.role; // Set user role in the service
 
-       
         if (response.role === 'ADMIN') {
-          this.router.navigate(['/admin-dashboard']);  
+          this.router.navigate(['/admin-dashboard']);
         } else {
-          this.router.navigate(['/dashboard']);  // User Dashboard
+          this.router.navigate(['/dashboard']); // User Dashboard
         }
       },
       error => {
         console.error('Login failed:', error);
-        this.errorMessage = 'Invalid username or password';  
+        this.errorMessage = 'Invalid username or password';
       }
     );
   }
