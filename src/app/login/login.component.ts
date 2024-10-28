@@ -49,7 +49,7 @@ export class LoginComponent {
 
         // Navigate based on role
         if (response.role === 'ADMIN') {
-          this.router.navigate(['/admin-dashboard']);
+          this.router.navigate(['/dashboard']);
         } else {
           this.router.navigate(['/dashboard']); // User Dashboard
         }
