@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,19 +23,43 @@ import { ChartModule } from 'primeng/chart';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+
+// Import the tracking service
+import { UserActivityTrackerService } from 'projects/user-activity-tracker/src/public-api';
+import { Router, NavigationEnd } from '@angular/router';
+
+function initializeTracking(userActivityTrackerService: UserActivityTrackerService, router: Router) {
+  return () => {
+    // Listen for global navigation events
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const pageName = event.urlAfterRedirects;
+        userActivityTrackerService.trackPageNavigation(pageName);
+      }
+    });
+  };
+}
+
 @NgModule({
     declarations: [
         AppComponent,
         NotfoundComponent,
-        StreetlightDialogComponent,ChartsDemoComponent
+        StreetlightDialogComponent,
+        ChartsDemoComponent
     ],
     imports: [
-        AppRoutingModule,ContextMenuModule,MenubarModule,BrowserModule,BrowserAnimationsModule,
+        AppRoutingModule,
+        ContextMenuModule,
+        MenubarModule,
+        BrowserModule,
+        BrowserAnimationsModule,
         DialogModule,
         ChartModule,
         HttpClientModule,
-        DynamicDialogModule,BreadcrumbModule,
-        FullCalendarModule,ContextMenuModule
+        DynamicDialogModule,
+        BreadcrumbModule,
+        FullCalendarModule,
+        ContextMenuModule
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -45,7 +69,14 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
         IconService,
         NodeService,
         PhotoService,
-        ProductService
+        ProductService,
+        UserActivityTrackerService, // Add tracking service as provider
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeTracking,
+            deps: [UserActivityTrackerService, Router],
+            multi: true
+        }
     ],
     bootstrap: [AppComponent]
 })

@@ -104,6 +104,39 @@
                     }
                 }
             }
+        },
+        "user-activity-tracker": {
+          "projectType": "library",
+          "root": "projects/user-activity-tracker",
+          "sourceRoot": "projects/user-activity-tracker/src",
+          "prefix": "lib",
+          "architect": {
+            "build": {
+              "builder": "@angular-devkit/build-angular:ng-packagr",
+              "options": {
+                "project": "projects/user-activity-tracker/ng-package.json"
+              },
+              "configurations": {
+                "production": {
+                  "tsConfig": "projects/user-activity-tracker/tsconfig.lib.prod.json"
+                },
+                "development": {
+                  "tsConfig": "projects/user-activity-tracker/tsconfig.lib.json"
+                }
+              },
+              "defaultConfiguration": "production"
+            },
+            "test": {
+              "builder": "@angular-devkit/build-angular:karma",
+              "options": {
+                "tsConfig": "projects/user-activity-tracker/tsconfig.spec.json",
+                "polyfills": [
+                  "zone.js",
+                  "zone.js/testing"
+                ]
+              }
+            }
+          }
         }
     },
     "cli": {
