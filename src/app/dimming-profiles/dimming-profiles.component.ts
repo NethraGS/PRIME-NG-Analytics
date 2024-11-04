@@ -14,40 +14,38 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SidebarModule } from 'primeng/sidebar';
 import { UserActivityTrackerService } from 'projects/user-activity-tracker/src/public-api';
-// Define the DimmingProfile interface directly here
+
 interface DimmingProfile {
   id?: number;
   profileName: string;
   profileType: string;
-  startTimeLampLevel: string; // Example: "50%"
-  motionOrPhotocellStart: string; // Motion or Photocell
-  sunriseLampLevel: string; // Example: "30%"
-  motionOrPhotocellSunrise: string; // Motion or Photocell
-  sunsetLampLevel: string; // Example: "70%"
-  motionOrPhotocellSunset: string; // Motion or Photocell
+  startTimeLampLevel: string;
+  motionOrPhotocellStart: string;
+  sunriseLampLevel: string;
+  motionOrPhotocellSunrise: string;
+  sunsetLampLevel: string;
+  motionOrPhotocellSunset: string;
 }
 
 @Component({
   selector: 'app-dimming-profiles',
   standalone: true,
+  templateUrl: './dimming-profiles.component.html',
   imports: [
     CommonModule, SidebarModule, FormsModule, ColorPickerModule, DropdownModule, CheckboxModule,
     ButtonModule, TableModule, InputTextModule, PanelModule, InputNumberModule, CalendarModule
   ],
-  providers: [UserActivityTrackerService],
-  templateUrl: './dimming-profiles.component.html',
   styleUrls: ['./dimming-profiles.component.scss'],
+  providers: [UserActivityTrackerService],
 })
 export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
-
-  color: string = '#ff0000'; // Default color
+  color: string = '#ff0000';
   selectedProfileType: string | undefined;
   profileTypes = [
     { label: '24 Hours Profile', value: '24-hours' },
     { label: 'Custom Profile', value: 'custom' },
   ];
-
-  dimmingProfiles: DimmingProfile[] = []; // To hold fetched profiles
+  dimmingProfiles: DimmingProfile[] = [];
   newProfile: DimmingProfile = {
     profileName: '',
     profileType: '',
@@ -56,31 +54,27 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
     sunriseLampLevel: '',
     motionOrPhotocellSunrise: 'Photocell',
     sunsetLampLevel: '',
-    motionOrPhotocellSunset: 'Motion'
-  }; // To hold new or selected profile data
+    motionOrPhotocellSunset: 'Motion',
+  };
   sidebarVisible: boolean = false;
 
   constructor(private http: HttpClient, private userActivityTracker: UserActivityTrackerService) {}
 
   ngAfterViewInit() {
-    this.loadProfiles(); // Load existing profiles when the component is initialized
+    this.loadProfiles();
   }
 
   ngOnDestroy() {}
 
   loadProfiles() {
     this.http.get<DimmingProfile[]>('http://localhost:8080/api/profiles').subscribe(
-      profiles => {
-        this.dimmingProfiles = profiles;
-      },
-      error => {
-        console.error('Error loading profiles', error);
-      }
+      (profiles) => (this.dimmingProfiles = profiles),
+      (error) => console.error('Error loading profiles', error)
     );
   }
 
   showSidebar() {
-    this.sidebarVisible = true; // This function will now show the sidebar
+    this.sidebarVisible = true;
   }
 
   resetProfile() {
@@ -92,56 +86,46 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
       sunriseLampLevel: '',
       motionOrPhotocellSunrise: 'Photocell',
       sunsetLampLevel: '',
-      motionOrPhotocellSunset: 'Motion'
-    }; // Reset profile data
+      motionOrPhotocellSunset: 'Motion',
+    };
   }
 
   saveProfile() {
     if (this.newProfile.id) {
-      // Update existing profile
       this.http.put(`http://localhost:8080/api/profiles/${this.newProfile.id}`, this.newProfile).subscribe(
         () => {
-          this.loadProfiles(); // Reload profiles after saving
-          this.resetProfile(); // Reset new profile form
-          this.sidebarVisible = false; // Hide sidebar after saving
-          this.userActivityTracker.trackCustomAction('Profile Updated', this.newProfile); // Track action
+          this.loadProfiles();
+          this.resetProfile();
+          this.sidebarVisible = false;
+          this.userActivityTracker.trackCustomAction('Profile Updated', this.newProfile);
         },
-        error => {
-          console.error('Error saving profile', error);
-        }
+        (error) => console.error('Error saving profile', error)
       );
     } else {
-      // Create new profile
       this.http.post('http://localhost:8080/api/profiles', this.newProfile).subscribe(
         () => {
-          this.loadProfiles(); // Reload profiles after saving
-          this.resetProfile(); // Reset new profile form
-          this.sidebarVisible = false; // Hide sidebar after saving
-          this.userActivityTracker.trackCustomAction('Profile Created', this.newProfile); // Track action
+          this.loadProfiles();
+          this.resetProfile();
+          this.sidebarVisible = false;
+          this.userActivityTracker.trackCustomAction('Profile Created', this.newProfile);
         },
-        error => {
-          console.error('Error saving profile', error);
-        }
+        (error) => console.error('Error saving profile', error)
       );
     }
   }
 
-  // Load profile data into the form for editing
   editProfile(profile: DimmingProfile) {
-    this.newProfile = { ...profile }; // Copy the selected profile into newProfile for editing
-    this.sidebarVisible = true; // Show the sidebar when editing
+    this.newProfile = { ...profile };
+    this.sidebarVisible = true;
   }
 
-  // Delete profile
   deleteProfile(id: number) {
     this.http.delete(`http://localhost:8080/api/profiles/${id}`).subscribe(
       () => {
-        this.loadProfiles(); 
-        this.userActivityTracker.trackButtonClick('Profile Deleted');
+        this.loadProfiles();
+        this.userActivityTracker.trackCustomAction('Profile Deleted', { id });
       },
-      error => {
-        console.error('Error deleting profile', error);
-      }
+      (error) => console.error('Error deleting profile', error)
     );
   }
 }
