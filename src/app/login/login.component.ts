@@ -6,7 +6,8 @@ import { PasswordModule } from 'primeng/password'; // PrimeNG password component
 import { FormsModule } from '@angular/forms'; // Forms module for two-way binding
 import { CommonModule } from '@angular/common'; // CommonModule for Angular directives
 import { UserService } from '../UserService';
-
+import { UserActivityTrackerService } from 'projects/user-activity-tracker/src/public-api';
+import { AuthGuard } from '../auth-guard.guard';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -19,7 +20,8 @@ import { UserService } from '../UserService';
       margin-right: 1rem;
       color: var(--primary-color) !important;
     }
-  `]
+  `],
+  providers:[UserActivityTrackerService,AuthGuard]
 })
 export class LoginComponent {
   username!: string;

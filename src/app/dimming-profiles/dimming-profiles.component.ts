@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy,HostListener} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'primeng/colorpicker';
@@ -13,7 +13,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SidebarModule } from 'primeng/sidebar';
-
+import { UserActivityTrackerService } from 'projects/user-activity-tracker/src/public-api';
 // Define the DimmingProfile interface directly here
 interface DimmingProfile {
   id?: number;
@@ -31,13 +31,15 @@ interface DimmingProfile {
   selector: 'app-dimming-profiles',
   standalone: true,
   imports: [
-    CommonModule, SidebarModule, FormsModule, ColorPickerModule, DropdownModule, CheckboxModule, 
+    CommonModule, SidebarModule, FormsModule, ColorPickerModule, DropdownModule, CheckboxModule,
     ButtonModule, TableModule, InputTextModule, PanelModule, InputNumberModule, CalendarModule
   ],
+  providers: [UserActivityTrackerService],
   templateUrl: './dimming-profiles.component.html',
   styleUrls: ['./dimming-profiles.component.scss'],
 })
 export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
+
   color: string = '#ff0000'; // Default color
   selectedProfileType: string | undefined;
   profileTypes = [
@@ -58,7 +60,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
   }; // To hold new or selected profile data
   sidebarVisible: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userActivityTracker: UserActivityTrackerService) {}
 
   ngAfterViewInit() {
     this.loadProfiles(); // Load existing profiles when the component is initialized
@@ -102,6 +104,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
           this.loadProfiles(); // Reload profiles after saving
           this.resetProfile(); // Reset new profile form
           this.sidebarVisible = false; // Hide sidebar after saving
+          this.userActivityTracker.trackCustomAction('Profile Updated', this.newProfile); // Track action
         },
         error => {
           console.error('Error saving profile', error);
@@ -114,6 +117,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
           this.loadProfiles(); // Reload profiles after saving
           this.resetProfile(); // Reset new profile form
           this.sidebarVisible = false; // Hide sidebar after saving
+          this.userActivityTracker.trackCustomAction('Profile Created', this.newProfile); // Track action
         },
         error => {
           console.error('Error saving profile', error);
@@ -132,7 +136,8 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
   deleteProfile(id: number) {
     this.http.delete(`http://localhost:8080/api/profiles/${id}`).subscribe(
       () => {
-        this.loadProfiles(); // Reload profiles after deletion
+        this.loadProfiles(); 
+        this.userActivityTracker.trackButtonClick('Profile Deleted');
       },
       error => {
         console.error('Error deleting profile', error);
