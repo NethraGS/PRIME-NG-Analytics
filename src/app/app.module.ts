@@ -23,12 +23,12 @@ import { ChartModule } from 'primeng/chart';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-
+import { TrackingService } from './tracking.service';
 // Import the tracking service
-import { UserActivityTrackerService } from 'projects/user-activity-tracker/src/public-api';
+
 import { Router, NavigationEnd } from '@angular/router';
 
-function initializeTracking(userActivityTrackerService: UserActivityTrackerService, router: Router) {
+/*function initializeTracking(userActivityTrackerService: UserActivityTrackerService, router: Router) {
   return () => {
     // Listen for global navigation events
     router.events.subscribe(event => {
@@ -38,7 +38,7 @@ function initializeTracking(userActivityTrackerService: UserActivityTrackerServi
       }
     });
   };
-}
+} */
 
 @NgModule({
     declarations: [
@@ -63,20 +63,20 @@ function initializeTracking(userActivityTrackerService: UserActivityTrackerServi
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        CountryService,
+        CountryService,TrackingService,
         CustomerService,
         EventService,
         IconService,
         NodeService,
         PhotoService,
         ProductService,
-        UserActivityTrackerService, // Add tracking service as provider
-        {
+        
+        /*{
             provide: APP_INITIALIZER,
             useFactory: initializeTracking,
             deps: [UserActivityTrackerService, Router],
             multi: true
-        }
+        }*/
     ],
     bootstrap: [AppComponent]
 })

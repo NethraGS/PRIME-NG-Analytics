@@ -1,7 +1,7 @@
 <div class="dimming-profiles-container">
   <!-- Add New Profile Button -->
   <div class="button-group">
-    <p-button label="Add New Profile" icon="pi pi-plus" (click)="showSidebar()"></p-button>
+    <p-button id="addProfileBtn" label="Add New Profile" icon="pi pi-plus" (click)="showSidebar()"></p-button>
   </div>
 
   <!-- Table for displaying profiles -->
@@ -32,8 +32,8 @@
           <td>{{ profile.sunsetLampLevel }}</td>
           <td>{{ profile.motionOrPhotocellSunset }}</td>
           <td>
-            <p-button label="" icon="pi pi-pencil" (click)="editProfile(profile)"></p-button>
-            <p-button label="" icon="pi pi-trash" (click)="deleteProfile(profile.id)" class="p-button-danger"></p-button>
+            <p-button id="editProfileBtn" label="" icon="pi pi-pencil" (click)="editProfile(profile)"></p-button>
+            <p-button  id="deleteProfileBtn" label="" icon="pi pi-trash" (click)="deleteProfile(profile.id)" class="p-button-danger"></p-button>
           </td>
         </tr>
       </ng-template>
@@ -112,8 +112,8 @@
 
       <!-- Buttons -->
       <div class="button-group">
-        <p-button label="Reset" (click)="resetProfile()" class="p-button-secondary"></p-button>
-        <p-button label="Save Profile" (click)="saveProfile()"></p-button>
+        <p-button id="resetProfileBtn" label="Reset" (click)="resetProfile()" class="p-button-secondary"></p-button>
+        <p-button id="saveProfileBtn" label="Save Profile" (click)="saveProfile()"></p-button>
       </div>
     </div>
   </p-sidebar>

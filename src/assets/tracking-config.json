@@ -1,23 +1,16 @@
 {
-    "trackEvents": {
-      "buttonClicks": true,
-      "formSubmissions": true,
-      "pageViews": true,
-      "customActions": true
-    },
-    "elements": {
-      "buttons": [
-        { "id": "save-profile-button", "eventType": "click", "description": "Save Profile Button" },
-        { "id": "delete-profile-button", "eventType": "click", "description": "Delete Profile Button" }
-      ],
-      "forms": [
-        { "id": "profile-form", "eventType": "submit", "description": "Profile Form Submission" }
-      ],
-      "customActions": [
-        { "action": "Profile Created", "description": "Profile creation in sidebar" },
-        { "action": "Profile Updated", "description": "Profile updated in sidebar" },
-        { "action": "Profile Deleted", "description": "Profile deletion action" }
-      ]
-    }
+  "trackEvents": {
+    "buttonClicks": true,
+    "formSubmissions": true,
+    "pageViews": false,
+    "customActions": true
+  },
+  "elements": {
+    "forms": [
+      { "id": "profileForm", "eventType": "submit", "description": "Profile Form Submission" }
+    ],
+    "customActions": [
+      { "action": "logout", "description": "User Logout" }
+    ]
   }
-  
+}

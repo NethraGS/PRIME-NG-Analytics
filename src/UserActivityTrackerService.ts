@@ -1,6 +1,7 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { fromEvent } from 'rxjs';
+import { filter } from 'rxjs/operators'; // Import filter for event type checking
 
 interface TrackConfig {
   trackEvents: {
@@ -10,7 +11,6 @@ interface TrackConfig {
     customActions: boolean;
   };
   elements: {
-    buttons: { id: string; eventType: string; description: string }[];
     forms: { id: string; eventType: string; description: string }[];
     customActions: { action: string; description: string }[];
   };
@@ -20,6 +20,7 @@ interface TrackingEvent {
   description: string;
   eventType: string;
   timestamp: string;
+  targetId?: string; // To identify which button was clicked
 }
 
 @Injectable({
@@ -36,26 +37,32 @@ export class UserActivityTrackerService {
   }
 
   private loadConfig() {
-    this.http.get<TrackConfig>('/assets/tracking-config.json').subscribe((config) => {
-      this.config = config;
-      this.initializeTracking();
-    });
+    this.http.get<TrackConfig>('/assets/tracking-config.json').subscribe(
+      (config) => {
+        this.config = config;
+        this.initializeTracking();
+      },
+      (error) => console.error('Failed to load tracking configuration:', error)
+    );
   }
 
   private initializeTracking() {
     if (!this.config) return;
 
+    // Track all button clicks
     if (this.config.trackEvents.buttonClicks) {
-      this.config.elements.buttons.forEach((button) => {
-        const element = document.getElementById(button.id);
-        if (element) {
-          fromEvent(element, button.eventType).subscribe(() => {
-            this.trackEvent(button.description, button.eventType);
-          });
-        }
-      });
+      const buttonContainer = document.body; // You could change this to a more specific container if necessary
+      fromEvent<MouseEvent>(buttonContainer, 'click') // Specify the type as MouseEvent
+        .pipe(
+          filter((event) => (event.target as HTMLElement).tagName === 'BUTTON') // Filter for button clicks
+        )
+        .subscribe((event) => {
+          const target = event.target as HTMLElement;
+          this.trackEvent(`Button clicked: ${target.innerText}`, 'click', { targetId: target.id });
+        });
     }
 
+    // Track form submissions
     if (this.config.trackEvents.formSubmissions) {
       this.config.elements.forms.forEach((form) => {
         const element = document.getElementById(form.id);
@@ -79,9 +86,10 @@ export class UserActivityTrackerService {
       description,
       eventType,
       timestamp: new Date().toISOString(),
+      ...additionalData, // Spread additional data like targetId
     };
 
-    this.http.post(this.apiUrl, { ...trackingEvent, ...additionalData }).subscribe({
+    this.http.post(this.apiUrl, trackingEvent).subscribe({
       next: () => console.log('Event sent to backend:', trackingEvent),
       error: (error) => console.error('Error sending event:', error),
     });

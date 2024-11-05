@@ -13,7 +13,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SidebarModule } from 'primeng/sidebar';
-import { UserActivityTrackerService } from 'projects/user-activity-tracker/src/public-api';
+
 
 interface DimmingProfile {
   id?: number;
@@ -36,7 +36,7 @@ interface DimmingProfile {
     ButtonModule, TableModule, InputTextModule, PanelModule, InputNumberModule, CalendarModule
   ],
   styleUrls: ['./dimming-profiles.component.scss'],
-  providers: [UserActivityTrackerService],
+ // providers: [UserActivityTrackerService],
 })
 export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
   color: string = '#ff0000';
@@ -58,7 +58,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
   };
   sidebarVisible: boolean = false;
 
-  constructor(private http: HttpClient, private userActivityTracker: UserActivityTrackerService) {}
+  constructor(private http: HttpClient) {}
 
   ngAfterViewInit() {
     this.loadProfiles();
@@ -97,7 +97,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
           this.loadProfiles();
           this.resetProfile();
           this.sidebarVisible = false;
-          this.userActivityTracker.trackCustomAction('Profile Updated', this.newProfile);
+          
         },
         (error) => console.error('Error saving profile', error)
       );
@@ -107,7 +107,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
           this.loadProfiles();
           this.resetProfile();
           this.sidebarVisible = false;
-          this.userActivityTracker.trackCustomAction('Profile Created', this.newProfile);
+      
         },
         (error) => console.error('Error saving profile', error)
       );
@@ -123,7 +123,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
     this.http.delete(`http://localhost:8080/api/profiles/${id}`).subscribe(
       () => {
         this.loadProfiles();
-        this.userActivityTracker.trackCustomAction('Profile Deleted', { id });
+       
       },
       (error) => console.error('Error deleting profile', error)
     );
