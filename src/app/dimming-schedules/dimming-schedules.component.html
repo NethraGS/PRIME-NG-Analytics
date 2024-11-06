@@ -1,16 +1,13 @@
 <div class="dimming-schedules-container">
-  <h2>Dimming Schedules</h2>
 
-  <div style="display: flex; justify-content: flex-end;">
-    <p-button 
+  <div style="display: flex; justify-content: flex-start;">
+    <p-button icon="pi pi-plus"
       label="Add New Schedule" 
       (click)="toggleSidebar()" 
       class="add-button">
     </p-button>
   </div>
   
-
-
   <p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" position="right" [style]="{'width':'400px'}">
     <h3>{{ isEditing ? 'Edit Schedule' : 'Add New Schedule' }}</h3>
     <div class="form-group">
@@ -57,6 +54,4 @@
       </tr>
     </tbody>
   </table>
-
-  
 </div>
