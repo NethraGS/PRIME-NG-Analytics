@@ -1,24 +1,28 @@
 (function() {
     const tracking = {
         dataLayer: [],
+        listenersInitialized: false, 
 
         init() {
-            this.setupEventListeners();
-            this.trackPageView();
-            this.trackNavigation();
+           
+            if (!this.listenersInitialized) {
+                this.setupEventListeners();
+                this.trackPageView();
+                this.trackNavigation();
+                this.listenersInitialized = true; 
+            }
         },
 
-        // Sets up global event listeners for various user actions
+  
         setupEventListeners() {
-            // Track click events with filters for meaningful clicks
+          
+            if (this.listenersInitialized) return;
+
+           
             document.addEventListener('click', (event) => {
                 const target = event.target;
-                
-                // Check if the element is a valid button, link, or has identifiable information
                 const isValidClick = target.id || target.className || (target.innerText && target.innerText.trim());
                 const validTagTypes = ['button', 'a', 'input', 'select', 'textarea'];
-                
-                // Additionally, check for PrimeNG icon buttons
                 const isPrimeNGButton = target.classList.contains('p-button') || target.closest('.p-button');
 
                 if (isValidClick && (validTagTypes.includes(target.tagName.toLowerCase()) || isPrimeNGButton)) {
@@ -27,7 +31,9 @@
                         elementClass: target.className || '',
                         elementText: target.innerText.trim() || '',
                         elementType: target.tagName.toLowerCase(),
-                        isPrimeNG: isPrimeNGButton // Identify if it's a PrimeNG button
+                        isPrimeNG: isPrimeNGButton,
+                        pageName: document.title,
+                        url: window.location.href
                     };
                     this.trackEvent('click', eventData);
                 }
@@ -40,25 +46,27 @@
                     const eventData = {
                         formId: target.id || '',
                         formName: target.name || '',
+                        pageName: document.title,
+                        url: window.location.href
                     };
                     this.trackEvent('formSubmission', eventData);
                 }
             });
 
-            // Track scroll depth (25%, 50%, 75%, 100%)
+            // Track scroll depth
             window.addEventListener('scroll', () => {
                 const scrollDepth = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
                 if (scrollDepth >= 25 && scrollDepth < 50 && !this.scroll25) {
-                    this.trackEvent('scroll', { depth: '25%' });
+                    this.trackEvent('scroll', { depth: '25%', pageName: document.title, url: window.location.href });
                     this.scroll25 = true;
                 } else if (scrollDepth >= 50 && scrollDepth < 75 && !this.scroll50) {
-                    this.trackEvent('scroll', { depth: '50%' });
+                    this.trackEvent('scroll', { depth: '50%', pageName: document.title, url: window.location.href });
                     this.scroll50 = true;
                 } else if (scrollDepth >= 75 && scrollDepth < 100 && !this.scroll75) {
-                    this.trackEvent('scroll', { depth: '75%' });
+                    this.trackEvent('scroll', { depth: '75%', pageName: document.title, url: window.location.href });
                     this.scroll75 = true;
                 } else if (scrollDepth >= 100 && !this.scroll100) {
-                    this.trackEvent('scroll', { depth: '100%' });
+                    this.trackEvent('scroll', { depth: '100%', pageName: document.title, url: window.location.href });
                     this.scroll100 = true;
                 }
             });
@@ -66,8 +74,6 @@
             // Track right-click (context menu) events
             document.addEventListener('contextmenu', (event) => {
                 const target = event.target;
-
-                // Check if the target element or any parent has the 'context-menu' class
                 const isContextMenu = target.classList.contains('context-menu') || target.closest('.context-menu');
 
                 if (isContextMenu) {
@@ -76,11 +82,14 @@
                         elementClass: target.className || '',
                         elementText: target.innerText ? target.innerText.trim() : '',
                         elementType: target.tagName.toLowerCase(),
+                        pageName: document.title,
+                        url: window.location.href
                     };
                     this.trackEvent('rightClick', eventData);
                 }
-});
+            });
 
+            this.listenersInitialized = true; 
         },
 
         // Track page views
@@ -92,7 +101,7 @@
             this.trackEvent('pageView', eventData);
         },
 
-        // Track navigation (popstate for back/forward navigation in SPAs)
+        // Track navigation 
         trackNavigation() {
             window.addEventListener('popstate', () => {
                 const eventData = {
@@ -110,11 +119,11 @@
                 data,
                 timestamp: new Date().toISOString(),
             };
-            this.dataLayer.push(event); 
-            this.sendDataToBackend(event); 
+            this.dataLayer.push(event);
+            this.sendDataToBackend(event);
         },
 
-        // Sends event data to the backend API
+        // Sends event data
         sendDataToBackend(event) {
             fetch('/api/track-event', {
                 method: 'POST',

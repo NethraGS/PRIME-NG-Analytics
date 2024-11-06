@@ -22,8 +22,8 @@ import { DimmingSchedulesComponent } from '../dimming-schedules/dimming-schedule
 })
 export class UserDashboardComponent implements OnInit, OnDestroy {
 
-  maintenanceRecords: any[] = []; // Initialize as an empty array
-  operationalData: any; // Adjust type according to your chart data structure
+  maintenanceRecords: any[] = []; 
+  operationalData: any; 
   items!: MenuItem[];
   products!: Product[];
   chartData: any;
@@ -41,7 +41,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
       this.initChart();
       this.productService.getProductsSmall().then(data => this.products = data);
-      this.fetchMaintenanceRecords(); // Fetch maintenance records
+      this.fetchMaintenanceRecords(); 
       this.items = [
           { label: 'Add New', icon: 'pi pi-fw pi-plus' },
           { label: 'Remove', icon: 'pi pi-fw pi-minus' }
@@ -108,8 +108,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   }
 
   fetchMaintenanceRecords() {
-      // Example: Fetch maintenance records from a service
-      // You should replace this with your actual data fetching logic
+      
       this.maintenanceRecords = [
           { streetlightId: 'SL001', date: new Date(), status: 'Completed' },
           { streetlightId: 'SL002', date: new Date(), status: 'Pending' },

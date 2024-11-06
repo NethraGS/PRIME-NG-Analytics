@@ -1,4 +1,3 @@
-// src/app/login/login.component.ts
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; // For HTTP requests
 import { Router } from '@angular/router'; // For navigation
@@ -6,8 +5,9 @@ import { PasswordModule } from 'primeng/password'; // PrimeNG password component
 import { FormsModule } from '@angular/forms'; // Forms module for two-way binding
 import { CommonModule } from '@angular/common'; // CommonModule for Angular directives
 import { UserService } from '../UserService';
-import { UserActivityTrackerService } from 'projects/user-activity-tracker/src/public-api';
+
 import { AuthGuard } from '../auth-guard.guard';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,7 +21,7 @@ import { AuthGuard } from '../auth-guard.guard';
       color: var(--primary-color) !important;
     }
   `],
-  providers:[UserActivityTrackerService,AuthGuard]
+  //providers: [UserActivityTrackerService, AuthGuard]
 })
 export class LoginComponent {
   username!: string;
@@ -36,24 +36,30 @@ export class LoginComponent {
 
   onSignIn() {
     const loginData = {
-      username: this.username, // Use 'username' as per your backend
+      username: this.username, 
       password: this.password
     };
 
-    // Sending login data to the backend API
     this.http.post('http://localhost:8080/api/login', loginData).subscribe(
       (response: any) => {
         console.log('Login successful:', response);
 
-        // Set userId and userRole in the service
-        this.userService.userId = response.userId; // Keep as string
+        
+        this.userService.userId = response.userId; 
         this.userService.userRole = response.role;
 
-        // Navigate based on role
+     
+        this.userService.startSession();
+
+        
+        sessionStorage.setItem('authToken', response.token);
+        sessionStorage.setItem('userId', response.userId); 
+
+     
         if (response.role === 'ADMIN') {
           this.router.navigate(['/dashboard']);
         } else {
-          this.router.navigate(['/dashboard']); // User Dashboard
+          this.router.navigate(['/dashboard']);
         }
       },
       error => {

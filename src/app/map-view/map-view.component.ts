@@ -11,7 +11,7 @@ import { SidebarModule } from 'primeng/sidebar';
   imports: [CommonModule, FormsModule,SidebarModule],
   templateUrl: 'map-view.component.html',
   styleUrls: ['map-view.component.scss'],
-  //providers:[UserActivityTrackerService]
+ 
 })
 export class MapviewComponent implements OnInit, AfterViewInit, OnDestroy {
   map!: Map;
@@ -19,7 +19,7 @@ export class MapviewComponent implements OnInit, AfterViewInit, OnDestroy {
   contextMenuPosition = { x: '0px', y: '0px' };
   selectedMarkerDetails: any = null;
   sidebarVisible = false;
-  streetlights: any[] = []; // To store streetlights fetched from backend
+  streetlights: any[] = []; 
 
   @ViewChild('map') private mapContainer!: ElementRef<HTMLElement>;
 
@@ -76,9 +76,9 @@ export class MapviewComponent implements OnInit, AfterViewInit, OnDestroy {
         .setPopup(popup)
         .addTo(this.map);
 
-      // Add right-click event listener for marker
+     
       markerElement.getElement().addEventListener('contextmenu', (event) => {
-        event.preventDefault(); // Prevent default context menu
+        event.preventDefault(); 
         this.showContextMenu(event, marker);
       });
     });

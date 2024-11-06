@@ -1,6 +1,4 @@
-// src/app/charts/chartsdemo.component.scss
 
-// Grid styles
 :host {
     display: block;
     padding: 1rem;
@@ -13,42 +11,42 @@
             flex-direction: column;
 
             .card {
-                margin-bottom: 1rem; // Space between cards
+                margin-bottom: 1rem; 
                 border: 1px solid var(--surface-border);
                 border-radius: 8px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 background-color: var(--surface);
 
                 h5 {
-                    font-size: 1.25rem; // Title font size
-                    margin: 0; // Remove default margin
-                    padding: 1rem; // Padding around the title
+                    font-size: 1.25rem; 
+                    margin: 0; 
+                    padding: 1rem; 
                     color: var(--text-color);
-                    border-bottom: 1px solid var(--surface-border); // Underline for titles
+                    border-bottom: 1px solid var(--surface-border); 
                 }
 
-                // Aligning the chart within the card
+              
                 p-chart {
-                    margin: 0; // Reset margin for the chart
-                    padding: 1rem; // Padding inside the card
-                    max-height: 300px; // Limiting height for better layout
-                    width: 100%; // Full width of card
+                    margin: 0; 
+                    padding: 1rem; 
+                    max-height: 300px; 
+                    width: 100%; 
                 }
             }
         }
 
-        // For large screens (lg)
+       
         @media (min-width: 768px) {
             .col-12.lg\:col-6 {
-                flex: 0 0 50%; // Make columns half the width on large screens
+                flex: 0 0 50%;
                 max-width: 50%;
             }
         }
     }
 }
 
-// Optional: Add hover effect for cards
+
 .card:hover {
-    transform: translateY(-2px); // Slight lift effect on hover
+    transform: translateY(-2px); 
     transition: transform 0.2s ease-in-out;
 }

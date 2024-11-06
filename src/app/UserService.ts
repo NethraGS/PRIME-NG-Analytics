@@ -9,7 +9,6 @@ export class UserService {
   sessionId: string | null = null;
   sessionStartTime: number | null = null;
 
-  // Setter and getter for userRole
   set userRole(role: string | null) {
     this._userRole = role;
   }
@@ -18,7 +17,7 @@ export class UserService {
     return this._userRole;
   }
 
-  // Setter and getter for userId
+
   set userId(id: string | null) {
     this._userId = id;
   }
@@ -27,22 +26,23 @@ export class UserService {
     return this._userId;
   }
 
-  // Check if the user is authenticated
+
   get isAuthenticated(): boolean {
-    return !!this._userId; // Assuming _userId is set when the user is authenticated
+    return !!this._userId; 
   }
 
-  // Generate a new session ID
+ 
   generateSessionId(): string {
     return '_' + Math.random().toString(36).substr(2, 9);
   }
 
-  // Start a new session
+ 
   startSession() {
     if (!this.sessionId) {
       this.sessionId = this.generateSessionId();
       this.sessionStartTime = Date.now();
-      // Additional logic to handle session start can be added here
+      sessionStorage.setItem('sessionId', this.sessionId);  
+      sessionStorage.setItem('sessionStartTime', this.sessionStartTime.toString()); 
     }
   }
 
@@ -50,16 +50,18 @@ export class UserService {
   endSession() {
     if (this.sessionId && this.sessionStartTime) {
       const sessionDuration = Date.now() - this.sessionStartTime;
-      // Logic to handle session end can be added here
+      sessionStorage.setItem('sessionDuration', sessionDuration.toString()); 
       this.sessionId = null;
       this.sessionStartTime = null;
+      sessionStorage.removeItem('sessionId'); 
+      sessionStorage.removeItem('sessionStartTime');
     }
   }
 
-  // Handle user logout
+ 
   logout() {
     this._userId = null;
     this._userRole = null;
-    this.endSession(); // Call endSession to clean up session data
+    this.endSession();
   }
 }

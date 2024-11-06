@@ -14,7 +14,7 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
-  // Data properties for various charts
+  
   pageVisitsData: any;
   timeOnPageData: any;
   sessionDurationData: any;
@@ -44,18 +44,18 @@ dropOffPointsData: any;
 dropOffPointsOptions: any;
 
 
-  // Subscription for layout service updates
+
   private subscription: Subscription;
 
   constructor(private layoutService: LayoutService) {
-    // Subscribe to layout updates with a debounce time
+  
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
       .subscribe(() => this.initCharts());
   }
 
   ngOnInit() {
-    // Initialize charts on component initialization
+   
     this.initCharts();
   }
 
@@ -64,7 +64,7 @@ dropOffPointsOptions: any;
     const textColor = documentStyle.getPropertyValue('--text-color').trim();
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary').trim();
 
-    // Page Visits Data
+
     this.pageVisitsData = {
       labels: ['Map View', 'Scheduler', 'Dashboard', 'Settings'],
       datasets: [{
@@ -76,7 +76,7 @@ dropOffPointsOptions: any;
 
     this.pageVisitsOptions = this.getChartOptions(textColor, textColorSecondary);
 
-    // Time on Page Data
+
     this.timeOnPageData = {
       labels: ['Map View', 'Scheduler', 'Dashboard', 'Settings'],
       datasets: [{
@@ -193,7 +193,7 @@ dropOffPointsOptions: any;
   }
 
   ngOnDestroy() {
-    // Unsubscribe from the layout service updates to prevent memory leaks
+ 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

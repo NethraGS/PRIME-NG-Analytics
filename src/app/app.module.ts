@@ -13,7 +13,7 @@ import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
 import { HttpClientModule } from '@angular/common/http';
 import { DynamicDialogModule } from 'primeng/dynamicdialog'; 
-import { StreetlightDialogComponent } from './streetlight-dialog/streetlight-dialog.component'; // Adjust the path as necessary
+
 import { DialogModule } from 'primeng/dialog'; 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -24,7 +24,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TrackingService } from './tracking.service';
-// Import the tracking service
+
 
 import { Router, NavigationEnd } from '@angular/router';
 
@@ -44,7 +44,6 @@ import { Router, NavigationEnd } from '@angular/router';
     declarations: [
         AppComponent,
         NotfoundComponent,
-        StreetlightDialogComponent,
         ChartsDemoComponent
     ],
     imports: [

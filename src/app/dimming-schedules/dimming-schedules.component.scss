@@ -33,23 +33,23 @@
 
    
     table.p-datatable {
-        width: 85%; // Set the table width to a percentage of the container
-        max-width: 800px; // Optional: set a maximum width for larger screens
-        margin: 0 auto; // Center the table in the container
+        width: 85%; 
+        max-width: 800px; 
+        margin: 0 auto;
         border-collapse: collapse;
 
         th, td {
             padding: 0.5em;
-            text-align: left; // Aligns text to the left
+            text-align: left; 
         }
 
         th {
-            background-color: #f4f4f4; // Adds a background color to the header
-            border-bottom: 2px solid #ccc; // Adds a bottom border
+            background-color: #f4f4f4; 
+            border-bottom: 2px solid #ccc; 
         }
 
         tr:nth-child(even) {
-            background-color: #f9f9f9; // Alternates row colors for better readability
+            background-color: #f9f9f9;
         }
     }
 }

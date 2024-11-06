@@ -22,7 +22,7 @@ interface User {
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  user: User | null = null; // Initialize as null to handle loading state
+  user: User | null = null; 
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
@@ -31,7 +31,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   fetchUserDetails(): void {
-    const userId = this.userService.userId; // Get userId from the service
+    const userId = this.userService.userId; 
     if (userId) {
       this.http.get<User>(`http://localhost:8080/api/users/${userId}`).subscribe({
         next: (data) => this.user = data,

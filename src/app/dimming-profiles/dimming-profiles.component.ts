@@ -36,7 +36,7 @@ interface DimmingProfile {
     ButtonModule, TableModule, InputTextModule, PanelModule, InputNumberModule, CalendarModule
   ],
   styleUrls: ['./dimming-profiles.component.scss'],
- // providers: [UserActivityTrackerService],
+
 })
 export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
   color: string = '#ff0000';

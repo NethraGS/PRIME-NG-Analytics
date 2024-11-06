@@ -18,7 +18,7 @@ export class BreadcrumbComponent implements OnInit {
     ngOnInit() {
         this.breadcrumbItems = [{ label: 'Home', routerLink: ['/dashboard'] }];
 
-        // Subscribe to route changes to update breadcrumb dynamically
+        
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
         ).subscribe((event: any) => {
@@ -27,7 +27,7 @@ export class BreadcrumbComponent implements OnInit {
     }
 
     updateBreadcrumb(url: string) {
-      this.breadcrumbItems = []; // Default to an empty breadcrumb
+      this.breadcrumbItems = []; 
   
       if (url.includes('/dashboard')) {
           // Home > Dashboard

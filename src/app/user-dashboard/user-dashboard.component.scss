@@ -1,14 +1,14 @@
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Fixed two-column layout */
-  grid-gap: 20px; /* Space between widgets */
-  padding: 20px; /* Optional padding around the grid */
+  grid-template-columns: repeat(2, 1fr); 
+  grid-gap: 20px;
+  padding: 20px; 
 }
 
 .widget {
   padding: 1rem;
-  background-color: #fff; /* Optional background color for better contrast */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for widget effect */
-  border-radius: 8px; /* Optional rounded corners */
-  overflow: hidden; /* Ensures content does not overflow */
+  background-color: #fff; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px; 
+  overflow: hidden; 
 }

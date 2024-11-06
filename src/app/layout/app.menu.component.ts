@@ -77,10 +77,10 @@ export class AppMenuComponent implements OnInit {
             }
         ];
 
-        // Initial breadcrumb
+     
         this.breadcrumbItems = [{ label: 'Home', routerLink: ['/dashboard'] }];
 
-        // Subscribe to route changes to update breadcrumb dynamically
+        
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
         ).subscribe((event: any) => {
@@ -88,7 +88,7 @@ export class AppMenuComponent implements OnInit {
         });
     }
 
-    // Function to update breadcrumb based on the route
+  
     updateBreadcrumb(url: string) {
         this.breadcrumbItems = [{ label: 'Home', routerLink: ['/dashboard'] }];
 
@@ -110,7 +110,7 @@ export class AppMenuComponent implements OnInit {
         }
     }
 
-    // Handle right-click context menu
+
     onRightClick(event: MouseEvent, item: any) {
         event.preventDefault();
 
