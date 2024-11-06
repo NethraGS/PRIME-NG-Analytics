@@ -1,4 +1,4 @@
-// src/app/app.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { TrackingService } from './tracking.service';
@@ -18,8 +18,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.primengConfig.ripple = true;
-
-   
   }
 
 }

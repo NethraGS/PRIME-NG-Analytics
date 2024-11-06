@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http'; // For HTTP requests
-import { Router } from '@angular/router'; // For navigation
-import { PasswordModule } from 'primeng/password'; // PrimeNG password component
-import { FormsModule } from '@angular/forms'; // Forms module for two-way binding
-import { CommonModule } from '@angular/common'; // CommonModule for Angular directives
+import { HttpClient } from '@angular/common/http'; 
+import { Router } from '@angular/router';
+import { PasswordModule } from 'primeng/password'; 
+import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common'; 
 import { UserService } from '../UserService';
-
 import { AuthGuard } from '../auth-guard.guard';
+
+
+interface LoginResponse {
+  userId: string;
+  role: string;
+  token: string;
+}
 
 @Component({
   selector: 'app-login',
@@ -21,7 +27,6 @@ import { AuthGuard } from '../auth-guard.guard';
       color: var(--primary-color) !important;
     }
   `],
-  //providers: [UserActivityTrackerService, AuthGuard]
 })
 export class LoginComponent {
   username!: string;
@@ -40,22 +45,18 @@ export class LoginComponent {
       password: this.password
     };
 
-    this.http.post('http://localhost:8080/api/login', loginData).subscribe(
-      (response: any) => {
+    this.http.post<LoginResponse>('http://localhost:8080/api/login', loginData).subscribe(
+      (response) => {
         console.log('Login successful:', response);
 
-        
         this.userService.userId = response.userId; 
         this.userService.userRole = response.role;
 
-     
         this.userService.startSession();
 
-        
         sessionStorage.setItem('authToken', response.token);
         sessionStorage.setItem('userId', response.userId); 
 
-     
         if (response.role === 'ADMIN') {
           this.router.navigate(['/dashboard']);
         } else {
