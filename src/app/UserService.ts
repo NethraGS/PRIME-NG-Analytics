@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service'; // Import ngx-cookie-service
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,17 +32,17 @@ export class UserService {
     return !!this._userId;  
   }
 
-  // Generate a random session ID
+ 
   generateSessionId(): string {
-    return '_' + Math.random().toString(36).substr(2, 9);  // Random session ID
+    return '_' + Math.random().toString(36).substr(2, 9);  
   }
 
   // Start a new session
   startSession() {
     if (!this.sessionId) {
-      this.sessionId = this.generateSessionId(); // Generate session ID
-      this.sessionStartTime = Date.now(); // Store start time
-      sessionStorage.setItem('sessionId', this.sessionId);  // Store session ID in sessionStorage
+      this.sessionId = this.generateSessionId(); 
+      this.sessionStartTime = Date.now(); 
+      sessionStorage.setItem('sessionId', this.sessionId);  
       sessionStorage.setItem('sessionStartTime', this.sessionStartTime.toString());  // Store start time
       this.cookieService.set('sessionId', this.sessionId); // Also store session ID in cookies
       this.cookieService.set('sessionStartTime', this.sessionStartTime.toString());  // Store start time in cookies

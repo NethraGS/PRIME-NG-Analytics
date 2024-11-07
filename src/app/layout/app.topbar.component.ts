@@ -3,7 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { LayoutService } from './service/app.layout.service';
 import { Router } from '@angular/router';
 import { UserService } from '../UserService';
-import { CookieService } from 'ngx-cookie-service'; // Import the CookieService
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-topbar',
@@ -24,7 +24,8 @@ export class AppTopBarComponent {
     public layoutService: LayoutService, 
     private router: Router, 
     private userService: UserService,
-    private cookieService: CookieService // Inject CookieService
+    private cookieService: CookieService 
+
   ) {
     this.userRole = this.userService.userRole;
     this.userId = this.userService.userId;
@@ -47,14 +48,13 @@ export class AppTopBarComponent {
   }
 
   logout() {
-    // Clear user session and role
-    this.userService.logout();  // Call the logout method from UserService
+  
+    this.userService.logout();  
 
-    // Delete authToken from cookies and sessionStorage
-    this.cookieService.delete('authToken');  // Clear auth token in cookies
-    sessionStorage.removeItem('authToken');  // Remove auth token from sessionStorage
+    this.cookieService.delete('authToken'); 
+    sessionStorage.removeItem('authToken'); 
 
-    // Navigate to login page after logout
-    this.router.navigate(['/']);  // Redirect to login page
+   
+    this.router.navigate(['/']);  
   }
 }
