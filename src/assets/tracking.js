@@ -12,8 +12,6 @@
                 this.listenersInitialized = true; 
             }
         },
-
-  
         setupEventListeners() {
           
             if (this.listenersInitialized) return;

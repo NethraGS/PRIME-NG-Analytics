@@ -1,4 +1,3 @@
-
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
@@ -12,6 +11,8 @@ import { ChartsDemoComponent } from './demo/components/uikit/charts/chartsdemo.c
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { AssetTableComponent } from './asset-table/asset-table.component';
+import { AuthGuard } from './auth-guard.guard';  
+
 @NgModule({
   imports: [
     RouterModule.forRoot(
@@ -21,20 +22,51 @@ import { AssetTableComponent } from './asset-table/asset-table.component';
           path: '',
           component: AppLayoutComponent,
           children: [
-            { path: 'dashboard', component: UserDashboardComponent, },
-            { path: 'mapview', component: MapviewComponent,  },
-           
+            {
+              path: 'dashboard',
+              component: UserDashboardComponent,
+              canActivate: [AuthGuard], 
+            },
+            {
+              path: 'mapview',
+              component: MapviewComponent,
+              canActivate: [AuthGuard],  
+            },
             {
               path: 'scheduler',
               children: [
-                { path: 'dimming-profiles', component: DimmingProfilesComponent,  },
-                { path: 'dimming-schedules', component: DimmingSchedulesComponent,  }
-              ]
+                {
+                  path: 'dimming-profiles',
+                  component: DimmingProfilesComponent,
+                  canActivate: [AuthGuard],  
+                },
+                {
+                  path: 'dimming-schedules',
+                  component: DimmingSchedulesComponent,
+                  canActivate: [AuthGuard],  
+                },
+              ],
             },
-            { path: 'charts', component: ChartsDemoComponent,  },
-            { path: 'user-profile/:id', component: UserProfileComponent,  },
-            { path: 'analytics', component: AnalyticsComponent,  },
-            { path: 'assets', component: AssetTableComponent },
+            {
+              path: 'charts',
+              component: ChartsDemoComponent,
+              canActivate: [AuthGuard],  
+            },
+            {
+              path: 'user-profile/:id',
+              component: UserProfileComponent,
+              canActivate: [AuthGuard],  
+            },
+            {
+              path: 'analytics',
+              component: AnalyticsComponent,
+              canActivate: [AuthGuard],  
+            },
+            {
+              path: 'assets',
+              component: AssetTableComponent,
+              canActivate: [AuthGuard], 
+            },
           ],
         },
         { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
