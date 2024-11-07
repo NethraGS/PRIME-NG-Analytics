@@ -1,0 +1,36 @@
+<div class="col-15 xl:col-15">
+    <div class="card">
+      <p-table [value]="streetlights" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>ID</th>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="type">Type <p-sortIcon field="type"></p-sortIcon></th>
+            <th>Coordinates</th>
+            <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+            <th>Location</th> 
+            <th>View</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-streetlight>
+          <tr>
+            <td>{{streetlight.id}}</td>
+            <td>{{streetlight.name}}</td>
+            <td>{{streetlight.type}}</td>
+            <td>{{streetlight.coordinates}}</td>
+            <td>{{streetlight.status ? 'Active' : 'Inactive'}}</td>
+            <td>{{streetlight.location}}</td> <!-- Display the Location data -->
+            <td>
+                
+                <button pbutton="" pripple="" type="button" icon="pi pi-search" class="p-element p-button p-component p-button-text p-button-icon-only"><span class="p-button-icon pi pi-search" aria-hidden="true"></span></button>
+        
+                
+          
+        
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  

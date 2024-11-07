@@ -47,6 +47,11 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/mapview']
                     },
                     {
+                        label: 'Asset Table', 
+                        icon: 'pi pi-fw pi-table',
+                        routerLink: ['/assets']
+                    },
+                    {
                         label: 'Scheduler',
                         icon: 'pi pi-fw pi-calendar',
                         items: [
@@ -76,25 +81,26 @@ export class AppMenuComponent implements OnInit {
                 ]
             }
         ];
-
-     
+    
         this.breadcrumbItems = [{ label: 'Home', routerLink: ['/dashboard'] }];
-
-        
+    
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
         ).subscribe((event: any) => {
             this.updateBreadcrumb(event.urlAfterRedirects);
         });
     }
-
+    
   
     updateBreadcrumb(url: string) {
         this.breadcrumbItems = [{ label: 'Home', routerLink: ['/dashboard'] }];
-
+    
         if (url.includes('/mapview')) {
             this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/mapview'] });
             this.breadcrumbItems.push({ label: 'MapView', routerLink: ['/mapview'] });
+        } else if (url.includes('/assets/asset-table')) {
+            this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/assets/asset-table'] });
+            this.breadcrumbItems.push({ label: 'Asset Table', routerLink: ['/assets/asset-table'] });
         } else if (url.includes('/scheduler')) {
             this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/scheduler'] });
             if (url.includes('/dimming-profiles')) {
@@ -109,6 +115,7 @@ export class AppMenuComponent implements OnInit {
             this.breadcrumbItems.push({ label: 'Charts', routerLink: ['/charts'] });
         }
     }
+    
 
 
     onRightClick(event: MouseEvent, item: any) {

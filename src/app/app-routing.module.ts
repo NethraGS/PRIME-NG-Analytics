@@ -11,7 +11,7 @@ import { DimmingSchedulesComponent } from './dimming-schedules/dimming-schedules
 import { ChartsDemoComponent } from './demo/components/uikit/charts/chartsdemo.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
-
+import { AssetTableComponent } from './asset-table/asset-table.component';
 @NgModule({
   imports: [
     RouterModule.forRoot(
@@ -34,6 +34,7 @@ import { AnalyticsComponent } from './analytics/analytics.component';
             { path: 'charts', component: ChartsDemoComponent,  },
             { path: 'user-profile/:id', component: UserProfileComponent,  },
             { path: 'analytics', component: AnalyticsComponent,  },
+            { path: 'assets', component: AssetTableComponent },
           ],
         },
         { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
