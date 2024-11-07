@@ -10,10 +10,7 @@ export class UserService {
   sessionId: string | null = null;
   sessionStartTime: number | null = null;
 
-  constructor(private cookieService: CookieService) {
-    // Listen for storage changes across tabs
-    window.addEventListener('storage', this.onStorageChange.bind(this));
-  }
+  constructor(private cookieService: CookieService) {}
 
   set userRole(role: string | null) {
     this._userRole = role;
@@ -32,8 +29,7 @@ export class UserService {
   }
 
   get isAuthenticated(): boolean {
-    // Check if the user is authenticated based on the presence of userId or auth token
-    return !!(this._userId || this.cookieService.get('authToken'));
+    return !!this._userId;  
   }
 
   // Generate a random session ID
@@ -75,19 +71,5 @@ export class UserService {
     this.endSession(); // End the session
     this.cookieService.delete('authToken'); // Clear auth token in cookies
     sessionStorage.removeItem('authToken');  // Remove auth token from sessionStorage
-
-    // Trigger the storage event to notify other tabs
-    window.dispatchEvent(new StorageEvent('storage', {
-      key: 'authToken',
-      newValue: null,
-    }));
-  }
-
-  // Listen for session changes (e.g., logout from another tab)
-  private onStorageChange(event: StorageEvent): void {
-    if (event.key === 'authToken' && !event.newValue) {
-      // If authToken is removed, logout the user in the current tab
-      this.logout();
-    }
   }
 }

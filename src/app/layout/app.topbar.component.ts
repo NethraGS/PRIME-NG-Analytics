@@ -47,13 +47,14 @@ export class AppTopBarComponent {
   }
 
   logout() {
-    // Use UserService to clear the session and user data
-    this.userService.logout(); 
+    // Clear user session and role
+    this.userService.logout();  // Call the logout method from UserService
 
-    // After logging out, navigate to the login page (or any other route)
-    this.router.navigate(['/login']);  // You can change this route based on your application setup
-    
-    // Optionally, you can clear any menu state or reset other UI elements here
-    this.isMenuOpen = false;  // Ensure the menu is closed after logout
+    // Delete authToken from cookies and sessionStorage
+    this.cookieService.delete('authToken');  // Clear auth token in cookies
+    sessionStorage.removeItem('authToken');  // Remove auth token from sessionStorage
+
+    // Navigate to login page after logout
+    this.router.navigate(['/']);  // Redirect to login page
   }
 }
