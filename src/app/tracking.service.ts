@@ -40,7 +40,7 @@ export class TrackingService {
 
 
   private sendJourneyDataToBackend(data: { url: string, timestamp: string }) {
-    fetch('/api/track-journey', {
+    fetch('http://localhost:8080/api/track-journey', { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

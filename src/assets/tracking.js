@@ -1,17 +1,17 @@
 (function() {
     const tracking = {
         dataLayer: [],
-        listenersInitialized: false, 
+        listenersInitialized: false,
 
         init() {
             if (!this.listenersInitialized) {
                 this.setupEventListeners();
                 this.trackPageView();
                 this.trackNavigation();
-                this.listenersInitialized = true; 
+                this.listenersInitialized = true;
             }
         },
-        
+
         setupEventListeners() {
             if (this.listenersInitialized) return;
 
@@ -19,24 +19,21 @@
                 const target = event.target;
                 const isValidClick = target.id || target.className || (target.innerText && target.innerText.trim());
                 const validTagTypes = ['button', 'a', 'input', 'select', 'textarea'];
-                const isPrimeNGButton = target.classList.contains('p-button') || target.closest('.p-button');
 
-                if (isValidClick && (validTagTypes.includes(target.tagName.toLowerCase()) || isPrimeNGButton)) {
+                if (isValidClick && validTagTypes.includes(target.tagName.toLowerCase())) {
                     const eventData = {
                         elementId: target.id || '',
                         elementClass: target.className || '',
                         elementText: target.innerText.trim() || '',
                         elementType: target.tagName.toLowerCase(),
-                        isPrimeNG: isPrimeNGButton,
                         pageName: document.title,
                         url: window.location.href,
-                        userId: this.getUserData().userId // Add userId to the event data
+                        userId: this.getUserData().userId
                     };
                     this.trackEvent('click', eventData);
                 }
             });
 
-            // Track form submissions
             document.addEventListener('submit', (event) => {
                 const target = event.target;
                 if (target && target.tagName.toLowerCase() === 'form') {
@@ -45,7 +42,7 @@
                         formName: target.name || '',
                         pageName: document.title,
                         url: window.location.href,
-                        userId: this.getUserData().userId // Add userId to the event data
+                        userId: this.getUserData().userId
                     };
                     this.trackEvent('formSubmission', eventData);
                 }
@@ -54,48 +51,26 @@
             window.addEventListener('load', () => {
                 tracking.setSessionStartTime();
                 tracking.init();
-                tracking.setupSessionEndTracking(); // Ensures session end is tracked on unload or logout
+                tracking.setupSessionEndTracking();
             });
 
-            // Track scroll depth
             window.addEventListener('scroll', () => {
                 const scrollDepth = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
                 if (scrollDepth >= 25 && scrollDepth < 50 && !this.scroll25) {
-                    this.trackEvent('scroll', { 
-                        depth: '25%', 
-                        pageName: document.title, 
-                        url: window.location.href,
-                        userId: this.getUserData().userId // Add userId to the event data
-                    });
+                    this.trackEvent('scroll', { depth: '25%', pageName: document.title, url: window.location.href, userId: this.getUserData().userId });
                     this.scroll25 = true;
                 } else if (scrollDepth >= 50 && scrollDepth < 75 && !this.scroll50) {
-                    this.trackEvent('scroll', { 
-                        depth: '50%', 
-                        pageName: document.title, 
-                        url: window.location.href,
-                        userId: this.getUserData().userId // Add userId to the event data
-                    });
+                    this.trackEvent('scroll', { depth: '50%', pageName: document.title, url: window.location.href, userId: this.getUserData().userId });
                     this.scroll50 = true;
                 } else if (scrollDepth >= 75 && scrollDepth < 100 && !this.scroll75) {
-                    this.trackEvent('scroll', { 
-                        depth: '75%', 
-                        pageName: document.title, 
-                        url: window.location.href,
-                        userId: this.getUserData().userId // Add userId to the event data
-                    });
+                    this.trackEvent('scroll', { depth: '75%', pageName: document.title, url: window.location.href, userId: this.getUserData().userId });
                     this.scroll75 = true;
                 } else if (scrollDepth >= 100 && !this.scroll100) {
-                    this.trackEvent('scroll', { 
-                        depth: '100%', 
-                        pageName: document.title, 
-                        url: window.location.href,
-                        userId: this.getUserData().userId // Add userId to the event data
-                    });
+                    this.trackEvent('scroll', { depth: '100%', pageName: document.title, url: window.location.href, userId: this.getUserData().userId });
                     this.scroll100 = true;
                 }
             });
 
-            // Track right-click (context menu) events
             document.addEventListener('contextmenu', (event) => {
                 const target = event.target;
                 const isContextMenu = target.classList.contains('context-menu') || target.closest('.context-menu');
@@ -108,20 +83,20 @@
                         elementType: target.tagName.toLowerCase(),
                         pageName: document.title,
                         url: window.location.href,
-                        userId: this.getUserData().userId // Add userId to the event data
+                        userId: this.getUserData().userId
                     };
                     this.trackEvent('rightClick', eventData);
                 }
             });
 
-            this.listenersInitialized = true; 
+            this.listenersInitialized = true;
         },
 
         trackPageView() {
             const eventData = {
                 url: window.location.href,
                 title: document.title,
-                userId: this.getUserData().userId // Add userId to the event data
+                userId: this.getUserData().userId
             };
             this.trackEvent('pageView', eventData);
         },
@@ -131,7 +106,7 @@
                 const eventData = {
                     url: window.location.href,
                     title: document.title,
-                    userId: this.getUserData().userId // Add userId to the event data
+                    userId: this.getUserData().userId
                 };
                 this.trackEvent('navigation', eventData);
             });
@@ -140,7 +115,15 @@
         trackEvent(action, data) {
             const event = {
                 action,
-                data,
+                elementId: data.elementId || '',
+                elementClass: data.elementClass || '',
+                elementText: data.elementText || '',
+                elementType: data.elementType || '',
+                pageName: data.pageName || '',
+                url: data.url || '',
+                userId: this.getUserData().userId || 'UnknownUser',
+                userRole: this.getUserData().userRole || 'UnknownRole',
+                depth: data.depth || '', // Scroll depth, if applicable
                 timestamp: new Date().toISOString(),
             };
             this.dataLayer.push(event);
@@ -148,7 +131,7 @@
         },
 
         sendDataToBackend(event) {
-            fetch('/api/track-event', {
+            fetch('http://localhost:8080/api/track-event', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -156,6 +139,7 @@
                 body: JSON.stringify(event),
             }).then(response => {
                 if (!response.ok) {
+                    console.error('Tracking error:', response.status, response.statusText);
                     throw new Error('Network response was not ok');
                 }
             }).catch(error => console.error('Tracking error:', error));
@@ -185,18 +169,16 @@
 
         getUserData() {
             return {
-                userId: sessionStorage.getItem('userId') || null,
-                userRole: sessionStorage.getItem('userRole') || null,
+                userId: sessionStorage.getItem('userId') || 'UnknownUser',
+                userRole: sessionStorage.getItem('userRole') || 'UnknownRole',
             };
         },
 
         setupSessionEndTracking() {
-            // Track session end on page unload
             window.addEventListener('beforeunload', () => {
                 this.sendSessionDuration();
             });
 
-            // Assuming there's a logout button with ID 'p-link layout-topbar-button'
             const logoutButton = document.getElementById('p-link layout-topbar-button');
             if (logoutButton) {
                 logoutButton.addEventListener('click', () => {
