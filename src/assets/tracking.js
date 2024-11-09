@@ -15,25 +15,52 @@
         setupEventListeners() {
             if (this.listenersInitialized) return;
 
+            // Intercept login API calls to start the session on successful login
+            this.interceptFetchForLogin();
+
             document.addEventListener('click', (event) => {
                 const target = event.target;
-                const isValidClick = target.id || target.className || (target.innerText && target.innerText.trim());
-                const validTagTypes = ['button', 'a', 'input', 'select', 'textarea'];
-
-                if (isValidClick && validTagTypes.includes(target.tagName.toLowerCase())) {
+                const validTagTypes = ['button', 'a', 'select', 'textarea'];
+                
+                const isButton = target.tagName.toLowerCase() === 'button' || 
+                                 target.closest('button');
+                const isPrimeNGButton = target.classList.contains('p-button') || 
+                                        target.closest('.p-button');
+                const isIcon = target.classList.contains('pi') || 
+                               target.closest('.pi');
+                
+                let elementType = target.tagName.toLowerCase();
+                if (isPrimeNGButton) {
+                    elementType = 'p-button';
+                } else if (isIcon) {
+                    elementType = 'icon';
+                } else if (isButton) {
+                    elementType = 'button';
+                }
+            
+                let elementText = target.innerText || '';
+                if (isPrimeNGButton && !elementText) {
+                    const childSpan = target.querySelector('span') || target.closest('.p-button')?.querySelector('span');
+                    elementText = childSpan ? childSpan.innerText.trim() : '';
+                }
+            
+                if (isButton || isPrimeNGButton || isIcon || validTagTypes.includes(elementType)) {
                     const eventData = {
-                        elementId: target.id || '',
-                        elementClass: target.className || '',
-                        elementText: target.innerText.trim() || '',
-                        elementType: target.tagName.toLowerCase(),
+                        action: 'click',
+                        elementId: target.id || target.closest('[id]')?.id || '',
+                        elementClass: target.className || target.closest('[class]')?.className || '',
+                        elementText: elementText || '',
+                        elementType: elementType,
                         pageName: document.title,
                         url: window.location.href,
-                        userId: this.getUserData().userId
+                        timestamp: new Date().toISOString(),
+                        userId: this.getUserData().userId,
+                        userRole: this.getUserData().userRole
                     };
                     this.trackEvent('click', eventData);
                 }
             });
-
+            
             document.addEventListener('submit', (event) => {
                 const target = event.target;
                 if (target && target.tagName.toLowerCase() === 'form') {
@@ -91,6 +118,40 @@
 
             this.listenersInitialized = true;
         },
+        interceptFetchForLogin() {
+            const originalFetch = window.fetch;
+            window.fetch = (...args) => {
+                // Check if the request is for the login API endpoint
+                if (args[0].includes('/api/login')) { // Replace with your actual login API endpoint
+                    return originalFetch(...args)
+                        .then(async response => {
+                            if (response.ok) {
+                                const data = await response.json();
+                                if (data.message === "Login successful") {
+                                    // Correctly refer to 'startSession' within the 'tracking' object
+                                    tracking.startSession(data.userId, data.role); // Assuming 'tracking' is in the global scope
+                                }
+                            }
+                            return response;
+                        })
+                        .catch(error => {
+                            console.error('Error during login fetch interception:', error);
+                            throw error; // Re-throw the error to allow further handling
+                        });
+                }
+                return originalFetch(...args);
+            };
+        },
+        
+        
+
+        startSession(userId, userRole) {
+            sessionStorage.setItem('userId', userId);
+            sessionStorage.setItem('userRole', userRole);
+            this.setSessionStartTime();
+            this.init();
+            this.setupSessionEndTracking();
+        },
 
         trackPageView() {
             const eventData = {
@@ -123,7 +184,7 @@
                 url: data.url || '',
                 userId: this.getUserData().userId || 'UnknownUser',
                 userRole: this.getUserData().userRole || 'UnknownRole',
-                depth: data.depth || '', // Scroll depth, if applicable
+                depth: data.depth || '',
                 timestamp: new Date().toISOString(),
             };
             this.dataLayer.push(event);
