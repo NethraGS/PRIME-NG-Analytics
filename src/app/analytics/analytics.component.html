@@ -2,81 +2,18 @@
   <!-- User Activity and Demographic Analysis Tab -->
   <p-tabPanel header="User Activity & Demographics">
     <h3>User Activity & Demographics</h3>
-    <div class="grid p-fluid">
-      <div class="col-12 lg:col-4">
-        <div class="card">
-          <h5>Page Visits</h5>
-          <p-chart type="bar" [data]="pageVisitsData" [options]="pageVisitsOptions"></p-chart>
-        </div>
-      </div>
-      <div class="col-12 lg:col-4">
-        <div class="card">
-          <h5>Time on Page</h5>
-          <p-chart type="line" [data]="timeOnPageData" [options]="timeOnPageOptions"></p-chart>
-        </div>
-      </div>
-      <div class="col-12 lg:col-4">
-        <div class="card">
-          <h5>Session Duration</h5>
-          <p-chart type="doughnut" [data]="sessionDurationData" [options]="sessionDurationOptions"></p-chart>
-        </div>
-      </div>
-    </div>
-    <div class="card mt-3">
-      <h5>User Demographics</h5>
-      <p-chart type="pie" [data]="demographicData" [options]="demographicOptions"></p-chart>
-    </div>
   </p-tabPanel>
 
   <!-- User Action Tracking Tab -->
   <p-tabPanel header="User Action Tracking">
     <h3>User Action Tracking</h3>
-    <div class="grid p-fluid">
-      <div class="col-12 lg:col-6">
-        <div class="card">
-          <h5>Dimming Profiles</h5>
-          <p-chart type="bar" [data]="dimmingProfilesData" [options]="dimmingProfilesOptions"></p-chart>
-        </div>
-      </div>
-      <div class="col-12 lg:col-6">
-        <div class="card">
-          <h5>Dimming Schedules</h5>
-          <p-chart type="pie" [data]="dimmingSchedulesData" [options]="dimmingSchedulesOptions"></p-chart>
-        </div>
-      </div>
-    </div>
-    <div class="grid p-fluid mt-3">
-      <div class="col-12 lg:col-6">
-        <div class="card">
-          <h5>Success Rates</h5>
-          <p-chart type="line" [data]="successRateData" [options]="successRateOptions"></p-chart>
-        </div>
-      </div>
-      <div class="col-12 lg:col-6">
-        <div class="card">
-          <h5>Failure Rates</h5>
-          <p-chart type="bar" [data]="failureRateData" [options]="failureRateOptions"></p-chart>
-        </div>
-      </div>
-    </div>
   </p-tabPanel>
 
   <!-- User Journeys and Behavior Flow Tab -->
   <p-tabPanel header="User Journeys & Behavior Flow">
-    <h3>User Journeys & Behavior Flow</h3>
-    <div class="grid p-fluid">
-      <div class="col-12 lg:col-6">
-        <div class="card">
-          <h5>Path Analysis</h5>
-          <p-chart type="line" [data]="pathAnalysisData" [options]="pathAnalysisOptions"></p-chart>
-        </div>
-      </div>
-      <div class="col-12 lg:col-6">
-        <div class="card">
-          <h5>Common Drop-off Points</h5>
-          <p-chart type="radar" [data]="dropOffPointsData" [options]="dropOffPointsOptions"></p-chart>
-        </div>
-      </div>
+    <div class="analytics-container">
+      <!-- Sankey Flow Chart for User Journeys -->
+      <p-chart type="sankey" [data]="pathAnalysisData" [options]="pathAnalysisOptions"></p-chart>
     </div>
   </p-tabPanel>
 </p-tabView>

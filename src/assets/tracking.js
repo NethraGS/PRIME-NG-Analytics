@@ -1,6 +1,8 @@
 (function() {
     const tracking = {
         dataLayer: [],
+        lastTrackedUrl: window.location.href,
+        previousPage: '',
         listenersInitialized: false,
 
         init() {
@@ -118,6 +120,7 @@
 
             this.listenersInitialized = true;
         },
+
         interceptFetchForLogin() {
             const originalFetch = window.fetch;
             window.fetch = (...args) => {
@@ -142,8 +145,6 @@
                 return originalFetch(...args);
             };
         },
-        
-        
 
         startSession(userId, userRole) {
             sessionStorage.setItem('userId', userId);
@@ -170,6 +171,18 @@
                     userId: this.getUserData().userId
                 };
                 this.trackEvent('navigation', eventData);
+
+                // Track the user journey (current and previous page)
+                const userJourneyData = {
+                    userId: this.getUserData().userId,
+                    currentPage: window.location.href,
+                    previousPage: this.lastTrackedUrl || '',
+                    timestamp: new Date().toISOString(),
+                };
+
+                // Send user journey data to the backend
+                this.sendUserJourneyToBackend(userJourneyData);
+                this.lastTrackedUrl = window.location.href; // Update the lastTrackedUrl after sending data
             });
         },
 
@@ -206,6 +219,21 @@
             }).catch(error => console.error('Tracking error:', error));
         },
 
+        sendUserJourneyToBackend(userJourneyData) {
+            fetch('http://localhost:8080/api/track-user-journey', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userJourneyData),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('User journey tracking error:', response.status, response.statusText);
+                    throw new Error('Network response was not ok');
+                }
+            }).catch(error => console.error('User journey tracking error:', error));
+        },
+
         setSessionStartTime() {
             if (!sessionStorage.getItem('sessionStartTime')) {
                 sessionStorage.setItem('sessionStartTime', Date.now().toString());
@@ -214,42 +242,33 @@
 
         calculateSessionDuration() {
             const sessionStartTime = parseInt(sessionStorage.getItem('sessionStartTime'), 10);
-            return sessionStartTime ? Date.now() - sessionStartTime : 0;
-        },
-
-        sendSessionDuration() {
-            const sessionDuration = this.calculateSessionDuration();
-            const user = this.getUserData();
-            const sessionData = {
-                action: 'sessionEnd',
-                data: { sessionDuration, user },
-                timestamp: new Date().toISOString(),
-            };
-            this.sendDataToBackend(sessionData);
-        },
-
-        getUserData() {
-            return {
-                userId: sessionStorage.getItem('userId') || 'UnknownUser',
-                userRole: sessionStorage.getItem('userRole') || 'UnknownRole',
-            };
+            if (!sessionStartTime) return 0;
+            return Date.now() - sessionStartTime;
         },
 
         setupSessionEndTracking() {
             window.addEventListener('beforeunload', () => {
-                this.sendSessionDuration();
+                const sessionDuration = this.calculateSessionDuration();
+                const eventData = {
+                    sessionDuration,
+                    userId: this.getUserData().userId,
+                    pageName: document.title,
+                    url: window.location.href
+                };
+                this.trackEvent('sessionEnd', eventData);
             });
-
-            const logoutButton = document.getElementById('p-link layout-topbar-button');
-            if (logoutButton) {
-                logoutButton.addEventListener('click', () => {
-                    this.sendSessionDuration();
-                });
-            }
         },
+
+        getUserData() {
+            const userId = sessionStorage.getItem('userId');
+            const userRole = sessionStorage.getItem('userRole');
+            return {
+                userId: userId || 'UnknownUser',
+                userRole: userRole || 'UnknownRole'
+            };
+        }
     };
 
-    window.addEventListener('load', () => {
-        tracking.init();
-    });
+    window.tracking = tracking;
+    tracking.init();
 })();
