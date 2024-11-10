@@ -42,8 +42,8 @@ export class UserService {
     if (!this.sessionId) {
       this.sessionId = this.generateSessionId(); 
       this.sessionStartTime = Date.now(); 
-      sessionStorage.setItem('sessionId', this.sessionId);  
-      sessionStorage.setItem('sessionStartTime', this.sessionStartTime.toString());  // Store start time
+      //sessionStorage.setItem('sessionId', this.sessionId);  
+     // sessionStorage.setItem('sessionStartTimeL', this.sessionStartTime.toString());  // Store start time
       this.cookieService.set('sessionId', this.sessionId); // Also store session ID in cookies
       this.cookieService.set('sessionStartTime', this.sessionStartTime.toString());  // Store start time in cookies
     }
@@ -66,6 +66,7 @@ export class UserService {
 
   // Logout the user
   logout() {
+    sessionStorage.setItem('logout', 'true');
     this._userId = null;
     this._userRole = null;
     this.endSession(); // End the session

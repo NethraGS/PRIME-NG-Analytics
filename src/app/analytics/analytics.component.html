@@ -9,6 +9,71 @@
     <h3>User Action Tracking</h3>
   </p-tabPanel>
 
+  <!-- Analytics Data Tab -->
+  <p-tabPanel header="Analytics Dashboard">
+    <h3>Analytics Dashboard</h3>
+
+    <!-- Date Picker for User -->
+    <div class="date-picker-container">
+      <p-calendar [(ngModel)]="startDate" [showTime]="true" hourFormat="24" placeholder="Start Date"></p-calendar>
+      <p-calendar [(ngModel)]="endDate" [showTime]="true" hourFormat="24" placeholder="End Date"></p-calendar>
+      
+      
+      <button pButton label="Fetch Analytics" icon="pi pi-search" (click)="fetchAnalyticsData()"></button>
+    </div>
+
+    <div class="grid">
+      <!-- Total Sessions -->
+      <div class="col-12 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+          <div class="flex justify-content-between mb-3">
+            <div>
+              <span class="block text-500 font-medium mb-3">Total Sessions</span>
+              <div class="text-900 font-medium text-xl">{{ totalSessions }}</div>
+            </div>
+            <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+              <i class="pi pi-calendar text-blue-500 text-xl"></i>
+            </div>
+          </div>
+          <span class="text-green-500 font-medium">New Sessions</span>
+        </div>
+      </div>
+
+      <!-- Average Session Duration -->
+      <div class="col-12 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+          <div class="flex justify-content-between mb-3">
+            <div>
+              <span class="block text-500 font-medium mb-3">Average Session Duration</span>
+              <div class="text-900 font-medium text-xl">{{ averageSessionDuration }} seconds</div>
+            </div>
+            <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+              <i class="pi pi-clock text-orange-500 text-xl"></i>
+            </div>
+          </div>
+          <span class="text-green-500 font-medium">%10+ </span>
+          <span class="text-500">compared to last month</span>
+        </div>
+      </div>
+
+      <!-- Average Sessions Per User -->
+      <div class="col-12 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+          <div class="flex justify-content-between mb-3">
+            <div>
+              <span class="block text-500 font-medium mb-3">Average Sessions per User</span>
+              <div class="text-900 font-medium text-xl">{{ averageSessionsPerUser }}</div>
+            </div>
+            <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+              <i class="pi pi-users text-cyan-500 text-xl"></i>
+            </div>
+          </div>
+          <span class="text-green-500 font-medium">Active Users</span>
+        </div>
+      </div>
+    </div>
+  </p-tabPanel>
+
   <!-- User Journeys and Behavior Flow Tab -->
   <p-tabPanel header="User Journeys & Behavior Flow">
     <div class="analytics-container">

@@ -11,7 +11,7 @@ import { EventService } from './demo/service/event.service';
 import { IconService } from './demo/service/icon.service';
 import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DynamicDialogModule } from 'primeng/dynamicdialog'; 
 
 import { DialogModule } from 'primeng/dialog'; 
@@ -24,7 +24,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TrackingService } from './tracking.service';
-
+import { TrackingInterceptor } from 'src/assets/tracking.interceptor';
 
 import { Router, NavigationEnd } from '@angular/router';
 
@@ -69,7 +69,11 @@ import { Router, NavigationEnd } from '@angular/router';
         NodeService,
         PhotoService,
         ProductService,
-        
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: TrackingInterceptor, // Register the interceptor
+          multi: true
+        },
         /*{
             provide: APP_INITIALIZER,
             useFactory: initializeTracking,

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     const tracking = {
         dataLayer: [],
         lastTrackedUrl: window.location.href,
@@ -62,7 +62,7 @@
                     this.trackEvent('click', eventData);
                 }
             });
-            
+
             document.addEventListener('submit', (event) => {
                 const target = event.target;
                 if (target && target.tagName.toLowerCase() === 'form') {
@@ -78,9 +78,9 @@
             });
 
             window.addEventListener('load', () => {
-                tracking.setSessionStartTime();
-                tracking.init();
-                tracking.setupSessionEndTracking();
+                this.setSessionStartTime();
+                this.init();
+                this.setupSessionEndTracking();
             });
 
             window.addEventListener('scroll', () => {
@@ -124,8 +124,8 @@
         interceptFetchForLogin() {
             const originalFetch = window.fetch;
             window.fetch = (...args) => {
-                // Check if the request is for the login API endpoint
-                if (args[0].includes('/api/login')) { // Replace with your actual login API endpoint
+                // Ensure args[0] is a string before calling .includes()
+                if (typeof args[0] === 'string' && args[0].includes('/api/login')) { // Replace with your actual login API endpoint
                     return originalFetch(...args)
                         .then(async response => {
                             if (response.ok) {
@@ -145,6 +145,7 @@
                 return originalFetch(...args);
             };
         },
+        
 
         startSession(userId, userRole) {
             sessionStorage.setItem('userId', userId);
@@ -256,7 +257,41 @@
                     url: window.location.href
                 };
                 this.trackEvent('sessionEnd', eventData);
+
+                // Send session duration data to the backend when logging out
+                if (sessionStorage.getItem('logout')) {
+                    this.storeSessionDurationInBackend(sessionDuration);
+                }
             });
+
+            // Detect logout action (you may need to adapt this based on your logout button)
+            const logoutButton = document.querySelector('#logout'); // Adjust selector
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    sessionStorage.setItem('logout', true);
+                });
+            }
+        },
+
+        storeSessionDurationInBackend(sessionDuration) {
+            const userId = this.getUserData().userId;
+            const userRole = this.getUserData().userRole;
+            fetch('http://localhost:8080/api/sessions/store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    userRole: userRole,
+                    sessionDuration: sessionDuration
+                }),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Session duration storage error:', response.status, response.statusText);
+                    throw new Error('Network response was not ok');
+                }
+            }).catch(error => console.error('Session duration storage error:', error));
         },
 
         getUserData() {

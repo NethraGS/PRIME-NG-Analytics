@@ -54,8 +54,8 @@ export class LoginComponent {
         this.userService.startSession();
 
         // Store authentication token and user info
-        sessionStorage.setItem('authToken', response.token);
-        sessionStorage.setItem('userId', response.userId);
+       // sessionStorage.setItem('authToken', response.token);
+       // sessionStorage.setItem('userId', response.userId);
 
         // Redirect based on role
         if (response.role === 'ADMIN') {

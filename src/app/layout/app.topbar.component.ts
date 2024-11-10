@@ -48,7 +48,8 @@ export class AppTopBarComponent {
   }
 
   logout() {
-  
+
+
     this.userService.logout();  
 
     this.cookieService.delete('authToken'); 
