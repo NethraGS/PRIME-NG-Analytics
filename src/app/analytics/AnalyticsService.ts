@@ -36,4 +36,25 @@ export class AnalyticsService {
     const url = 'http://localhost:8080/api/top-events';
     return this.http.get<any[]>(url);
   }
+
+
+  // New method for Total Page Views
+  getTotalPageViews(startDate: string, endDate: string): Observable<number> {
+    return this.http.get<number>(`http://localhost:8080/api/analytics/total-page-views?startDate=${startDate}&endDate=${endDate}`);
+  }
+
+  // New method for Unique Page Views
+  getUniquePageViews(startDate: string, endDate: string): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:8080/api/analytics/unique-page-views?startDate=${startDate}&endDate=${endDate}`);
+  }
+
+  // New method for Top Pages by Views
+  getTopPagesByViews(startDate: string, endDate: string): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:8080/api/analytics/top-pages?startDate=${startDate}&endDate=${endDate}`);
+  }
+
+  // New method for Page View Trends
+  getPageViewTrends(startDate: string, endDate: string): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:8080/api/analytics/page-view-trends?startDate=${startDate}&endDate=${endDate}`);
+  }
 }

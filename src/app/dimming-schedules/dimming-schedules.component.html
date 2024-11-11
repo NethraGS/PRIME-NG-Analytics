@@ -44,10 +44,13 @@
         <td>{{ schedule.endDate | date: 'longDate' }}</td>
         <td>{{ schedule.frequency }}</td>
         <td>
-          <p-dialog header="Dimming Schedule Calendar" [(visible)]="calendarVisible" [modal]="true" [style]="{width: '70vw'}" [closable]="true">
-            <full-calendar [options]="calendarOptions"></full-calendar>
-          </p-dialog>          
           <p-button icon="pi pi-calendar-plus" (click)="viewCalendar()" class="view-button"></p-button>
+
+<p-dialog *ngIf="calendarVisible" header="Dimming Schedule Calendar" [(visible)]="calendarVisible" [modal]="true"
+  [style]="{width: '70vw'}" [closable]="true">
+  <full-calendar [options]="calendarOptions"></full-calendar>
+</p-dialog>
+
           <p-button icon="pi pi-pencil" (click)="toggleSidebar(schedule)" class="edit-button"></p-button>
           <p-button icon="pi pi-trash" (click)="removeSchedule(schedule)" class="delete-button"></p-button>
         </td>

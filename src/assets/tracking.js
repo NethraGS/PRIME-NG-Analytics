@@ -303,6 +303,64 @@
         }
     };
 
+// Track initial page load
+function trackPageView() {
+    // Get session, user ID, and user role from sessionStorage or other source
+    const sessionId = sessionStorage.getItem('sessionId') || 'unknown'; // Example: retrieve from sessionStorage
+    const userId = sessionStorage.getItem('userId') || 'guest';         // Example: retrieve from sessionStorage
+    const userRole = sessionStorage.getItem('userRole') || 'visitor';   // Example: retrieve from sessionStorage
+  
+    // Track the initial page load
+    sendPageView(window.location.pathname, sessionId, userId, userRole);
+  
+    // Override pushState and replaceState to detect route changes
+    const originalPushState = history.pushState;
+    history.pushState = function (state, title, url) {
+      originalPushState.apply(this, arguments);
+      onUrlChange(url, sessionId, userId, userRole);
+    };
+  
+    const originalReplaceState = history.replaceState;
+    history.replaceState = function (state, title, url) {
+      originalReplaceState.apply(this, arguments);
+      onUrlChange(url, sessionId, userId, userRole);
+    };
+  
+    // Detect back/forward button navigation
+    window.addEventListener('popstate', function () {
+      onUrlChange(window.location.pathname, sessionId, userId, userRole);
+    });
+  }
+  
+  // Helper function to handle URL changes
+  function onUrlChange(url, sessionId, userId, userRole) {
+    sendPageView(url, sessionId, userId, userRole);
+  }
+  
+  // Function to send the page view to your backend API
+  function sendPageView(url, sessionId, userId, userRole) {
+    console.log("Tracking page view:", url, "Session ID:", sessionId, "User ID:", userId, "User Role:", userRole);
+  
+    // Replace with your actual API endpoint
+    fetch('http://localhost:8080/api/analytics/track-page-view', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        url: url,
+        timestamp: new Date(),
+        sessionId: sessionId,
+        userId: userId,
+        userRole: userRole
+      })
+    });
+  }
+  
+  // Initialize tracking
+  trackPageView();
+  
+
     window.tracking = tracking;
     tracking.init();
 })();
