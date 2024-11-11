@@ -1,13 +1,42 @@
 <p-tabView>
-  <!-- User Activity and Demographic Analysis Tab -->
-  <p-tabPanel header="User Activity & Demographics">
-    <h3>User Activity & Demographics</h3>
-  </p-tabPanel>
+  <p-tabView>
+    <!-- User Activity and Demographics Tab -->
+    <p-tabPanel header="User Activity & Demographics">
+      <h3>User Activity & Demographics</h3>
+      <div class="grid">
+        <!-- Top 5 Events - Horizontal Bar Chart -->
+        <div class="col-12 lg:col-6">
+          <div class="card">
+            <h5>Top 5 Events</h5>
+            <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
+          </div>
+        </div></div>
 
-  <!-- User Action Tracking Tab -->
-  <p-tabPanel header="User Action Tracking">
-    <h3>User Action Tracking</h3>
-  </p-tabPanel>
+         <!-- Event Overview - Pie Chart -->
+      <div class="col-12 lg:col-6">
+        <div class="card flex flex-column align-items-center">
+          <h5 class="text-left w-full">Event Overview</h5>
+          <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+        </div>
+      </div>
+    </p-tabPanel>
+  
+    <!-- User Action Tracking Tab -->
+    <p-tabPanel header="User Action Tracking">
+      <h3>User Action Tracking</h3>
+      <!-- Top Events List -->
+      <div class="top-events">
+        <h4>Top Events</h4>
+        <ul>
+          <li *ngFor="let event of topEvents">
+            {{ event[0] }}: {{ event[1] }} times
+          </li>
+        </ul>
+      </div>
+    </p-tabPanel>
+  
+   
+  
 
   <!-- Analytics Data Tab -->
   <p-tabPanel header="Analytics Dashboard">

@@ -25,4 +25,15 @@ export class AnalyticsService {
   getAverageSessionsPerUser(startDate: string, endDate: string): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/average-sessions-per-user?startDate=${startDate}&endDate=${endDate}`);
   }
+
+  getEventOverview(): Observable<any[]> {
+    const url = 'http://localhost:8080/api/event-overview';
+    return this.http.get<any[]>(url);
+  }
+
+  // New method to fetch top events
+  getTopEvents(): Observable<any[]> {
+    const url = 'http://localhost:8080/api/top-events';
+    return this.http.get<any[]>(url);
+  }
 }

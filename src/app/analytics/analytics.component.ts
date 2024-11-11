@@ -24,9 +24,18 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   averageSessionDuration: number = 0;
   averageSessionsPerUser: number = 0;
 
+  eventOverview: any[] = [];
+  topEvents: any[] = [];
+  pieChartData: any;
+
   // For Path Analysis (Sankey Chart)
   pathAnalysisData: any;
   pathAnalysisOptions: any;
+
+  barData: any;
+  pieData: any;
+  barOptions: any;
+  pieOptions: any;
 
   // Dates selected by user
   startDate: Date = new Date('2024-11-01T00:00:00');  // Default start date with time
@@ -38,6 +47,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     // Call the methods to fetch data on initial load
     this.fetchAnalyticsData();
     this.initPathAnalysisChart();
+    this.fetchEventOverviewData();
+    this.fetchTopEventsData();
   }
 
   // Fetch the data based on selected start and end dates
@@ -125,6 +136,63 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error fetching path analysis data:', error);
     }
+  }
+
+  fetchTopEventsData() {
+    this.analyticsService.getTopEvents().subscribe((data) => {
+      const labels = data.map((item: any) => item[0]);
+      const counts = data.map((item: any) => item[1]);
+
+      this.barData = {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Top 5 Events',
+            backgroundColor: '#42A5F5',
+            data: counts
+          }
+        ]
+      };
+
+      this.barOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { beginAtZero: true }
+        }
+      };
+    });
+  }
+
+  fetchEventOverviewData() {
+    this.analyticsService.getEventOverview().subscribe((data) => {
+      const eventTypeCountMap: { [key: string]: number } = {};
+
+      data.forEach((item: any) => {
+        const eventType = item[0];
+        eventTypeCountMap[eventType] = (eventTypeCountMap[eventType] || 0) + item[3];
+      });
+
+      this.pieData = {
+        labels: Object.keys(eventTypeCountMap),
+        datasets: [
+          {
+            data: Object.values(eventTypeCountMap),
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#F7464A']
+          }
+        ]
+      };
+
+      this.pieOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        }
+      };
+    });
   }
 
   ngOnDestroy() {

@@ -191,13 +191,12 @@
             const event = {
                 action,
                 elementId: data.elementId || '',
-                elementClass: data.elementClass || '',
                 elementText: data.elementText || '',
                 elementType: data.elementType || '',
                 pageName: data.pageName || '',
                 url: data.url || '',
-                userId: this.getUserData().userId || 'UnknownUser',
-                userRole: this.getUserData().userRole || 'UnknownRole',
+                userId: this.getUserData().userId,
+                userRole: this.getUserData().userRole,
                 depth: data.depth || '',
                 timestamp: new Date().toISOString(),
             };
@@ -307,3 +306,9 @@
     window.tracking = tracking;
     tracking.init();
 })();
+
+
+
+
+
+
