@@ -22,6 +22,7 @@ Chart.register(...registerables, SankeyController, Flow);
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
   // Analytics Data
+  topNpageviews:number = 5;
   totalSessions: number = 0;
   averageSessionDuration: number = 0;
   averageSessionsPerUser: number = 0;
@@ -191,7 +192,6 @@ formatDatePageView(date: Date): string {
   const day = pad(date.getDate());
   return `${year}-${month}-${day}`; // Return the date in 'yyyy-MM-dd' format
 }
-
 // Method to fetch Page Views Over Time
 fetchPageViewsOverTimeData() {
   const formattedStartDate = this.formatDatePageView(this.startDate); // Format date to 'yyyy-MM-dd'
@@ -203,9 +203,25 @@ fetchPageViewsOverTimeData() {
       data = Object.entries(data).map(([date, pageViews]) => ({ date, pageViews }));
     }
 
-    // Extract labels and page views counts for the chart
-    const timeLabels = data.map((item: any) => new Date(item.date).getTime());
-    const pageViewsCounts = data.map((item: any) => item.pageViews);
+    // Sort the data by date in ascending order
+    data.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    // Ensure all dates between start and end date are represented, even those without views
+    const allDates = this.getAllDatesInRange(formattedStartDate, formattedEndDate);
+    const dataMap = data.reduce((acc: any, curr: any) => {
+      acc[curr.date] = curr.pageViews;
+      return acc;
+    }, {});
+
+    // Fill missing dates with zero page views
+    const filledData = allDates.map((date) => ({
+      date,
+      pageViews: dataMap[date] || 0,
+    }));
+
+    // Extract labels (dates) and page view counts for the chart
+    const timeLabels = filledData.map((item: any) => new Date(item.date).getTime());
+    const pageViewsCounts = filledData.map((item: any) => item.pageViews);
 
     // Chart configuration
     this.pageViewsOverTimeData = {
@@ -216,6 +232,7 @@ fetchPageViewsOverTimeData() {
           data: pageViewsCounts,
           borderColor: '#42A5F5',
           fill: false,
+          tension: 0.1, // Smooth the curve
         },
       ],
     };
@@ -228,22 +245,34 @@ fetchPageViewsOverTimeData() {
           type: 'time',
           time: {
             unit: 'day',
-            tooltipFormat: 'yyyy-MM-dd', // Compatible format for tooltips
+            tooltipFormat: 'yyyy-MM-dd', // Format tooltip
             displayFormats: {
-              day: 'yyyy-MM-dd', // Compatible format for day display
+              day: 'yyyy-MM-dd', // Format for day display
             },
           },
         },
         y: {
           beginAtZero: true,
+          ticks: {
+            stepSize: 20, // Customize step size for y-axis
+          },
         },
       },
     };
   });
 }
 
-
-// Method to fetch Top Pages by Views
+// Helper function to generate all dates between start and end date
+getAllDatesInRange(startDate: string, endDate: string) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const dateArray = [];
+  while (start <= end) {
+    dateArray.push(this.formatDatePageView(start)); // Push formatted date
+    start.setDate(start.getDate() + 1); // Move to the next day
+  }
+  return dateArray;
+}
 fetchTopPagesByViewsData() {
   const formattedStartDate = this.formatDate(this.startDate);
   const formattedEndDate = this.formatDate(this.endDate);
@@ -253,7 +282,11 @@ fetchTopPagesByViewsData() {
     if (Array.isArray(data) && typeof data[0] === 'object') {
       data = data.map((item: any) => {
         const [pageName, pageViews] = Object.entries(item)[0];
-        return { pageName, pageViews };
+        
+        // Remove "#" and "/" prefix from page names and assign "Login" for root "/"
+        const formattedPageName = pageName === '/' ? 'Login' : pageName.replace(/^#\/|^\//, '');
+
+        return { pageName: formattedPageName, pageViews };
       });
     }
 
@@ -275,14 +308,24 @@ fetchTopPagesByViewsData() {
     this.topPagesByViewsOptions = {
       responsive: true,
       maintainAspectRatio: false,
+      indexAxis: 'y',
       scales: {
         x: {
           beginAtZero: true,
         },
-      },
+        y: {
+          ticks: {
+            autoSkip: false,  // Ensure all labels display
+            font: {
+              size: 10 // Optional: increase font size for readability
+            }
+          }
+        },
+      }
     };
   });
 }
+
 
 
   ngOnDestroy() {
