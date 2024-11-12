@@ -18,6 +18,30 @@
   </div>
 </div>
 </div>
+
+<!-- Page View Statistics Table -->
+    <div class="card mt-4">
+      <h5>Page View Statistics</h5>
+<p-table [value]="pageViewStats" responsive="true" styleClass="p-datatable-sm">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Page Path</th>
+      <th>Views</th>
+      <th>Users</th>
+      <th>Views per User</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-stat>
+    <tr>
+      <td>{{ stat.pagePath }}</td>
+      <td>{{ stat.views }}</td>
+      <td>{{ stat.users }}</td>
+      <td>{{ stat.viewsPerUser }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+    </div>
 </p-tabPanel>
     <p-tabPanel header="Events">
      

@@ -28,6 +28,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   averageSessionsPerUser: number = 0;
 
   eventOverview: any[] = [];
+  pageViewStats: any[] = []; 
   topEvents: any[] = [];
   pieChartData: any;
 
@@ -61,6 +62,7 @@ eventDetails: any;
     this.fetchTopEventsData();
     this.fetchPageViewsOverTimeData();
     this.fetchTopPagesByViewsData();
+    this.fetchPageViewStats();
     
   }
 
@@ -149,11 +151,12 @@ eventDetails: any;
 
   fetchEventOverviewData() {
     this.analyticsService.getEventOverview().subscribe((data) => {
+      // Transform nested array data into an array of objects with specific keys
       this.eventDetails = data.map((item: any) => ({
-        eventName: item[0],
-        eventCount: item[1],
-        totalUsers: item[2],
-        eventCountPerUser: item[1] / item[2],  // Calculate event count per user
+        eventName: item[0],          // e.g., "click"
+        eventCount: item[1],         // e.g., 695
+        totalUsers: item[2],         // e.g., 3
+        eventCountPerUser: item[3],  // e.g., 231.00
       }));
     });
   }
@@ -273,6 +276,23 @@ getAllDatesInRange(startDate: string, endDate: string) {
   }
   return dateArray;
 }
+fetchPageViewStats(): void {
+  this.analyticsService.getPageViewStats().subscribe(
+    (data) => {
+      // Directly assign the data to pageViewStats as it is already in the correct format
+      this.pageViewStats = data;
+      console.log('Fetched page view stats:', this.pageViewStats);
+    },
+    (error) => {
+      console.error('Error fetching page view stats:', error);
+    }
+  );
+}
+
+
+
+
+
 fetchTopPagesByViewsData() {
   const formattedStartDate = this.formatDate(this.startDate);
   const formattedEndDate = this.formatDate(this.endDate);

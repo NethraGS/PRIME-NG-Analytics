@@ -41,4 +41,8 @@ export class AnalyticsService {
   getPathAnalysisData(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:8080/api/path-analysis');
   }
+
+  getPageViewStats(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/pageview/stats`);
+  }
 }
