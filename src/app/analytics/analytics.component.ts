@@ -80,7 +80,7 @@ eventDetails: any;
 
     this.analyticsService.getAverageSessionDuration(formattedStartDate, formattedEndDate).subscribe(
       (data) => {
-        this.averageSessionDuration = data;
+        this.averageSessionDuration = Math.trunc((data/60) * 100) / 100;
       },
       (error) => {
         console.error('Error fetching average session duration:', error);

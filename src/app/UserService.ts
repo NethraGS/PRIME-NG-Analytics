@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class UserService {
   sessionId: string | null = null;
   sessionStartTime: number | null = null;
 
-  constructor(private cookieService: CookieService) {}
+  constructor(private cookieService: CookieService, private http: HttpClient, ) {}
 
   set userRole(role: string | null) {
     this._userRole = role;
@@ -62,15 +63,49 @@ export class UserService {
       this.cookieService.delete('sessionId');  // Remove from cookies
       this.cookieService.delete('sessionStartTime');  // Remove from cookies
     }
-  }
+  }// Helper function to format the date to yyyy-MM-dd'T'HH:mm:ss
+formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
 
-  // Logout the user
-  logout() {
-    sessionStorage.setItem('logout', 'true');
-    this._userId = null;
-    this._userRole = null;
-    this.endSession(); // End the session
-    this.cookieService.delete('authToken'); // Clear auth token in cookies
-    sessionStorage.removeItem('authToken');  // Remove auth token from sessionStorage
-  }
+// Logout the user
+logout() {
+  sessionStorage.setItem('logout', 'true');
+
+
+  const sessionData = {
+    sessionId: sessionStorage.getItem('sessionId') || '',
+    userId: Number(this._userId), 
+    userRole: this._userRole || '',
+    sessionStartTime: this.formatDate(new Date(parseInt(sessionStorage.getItem('sessionStartTime') || '0'))),
+    sessionEndTime: this.formatDate(new Date())
+  };
+
+  this.http.post('http://localhost:8080/api/sessions/store', sessionData)
+    .subscribe(
+      response => {
+        console.log('Session data saved successfully:', response);
+      },
+      error => {
+        console.error('Error saving session data:', error);
+      }
+    );
+
+  // Clear session and authentication data
+  this._userId = null;
+  this._userRole = null;
+  this.endSession();
+  this.cookieService.delete('authToken');
+  sessionStorage.removeItem('authToken');
+  sessionStorage.removeItem('sessionId');
+  sessionStorage.removeItem('sessionStartTime');
+}
+
+  
 }
