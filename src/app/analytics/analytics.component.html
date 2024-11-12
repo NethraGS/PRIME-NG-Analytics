@@ -2,13 +2,23 @@
   <p-tabPanel header="Page Views">
     <h3>Page Views</h3>
     <div class="grid">
-   <!-- Page Views Over Time (Line Chart) -->
-<div class="col-12 lg:col-6">
-  <div class="card">
-    <h5>Page Views Over Time</h5>
-    <p-chart type="line" [data]="pageViewsOverTimeData" [options]="pageViewsOverTimeOptions"></p-chart>
-  </div>
-</div>
+      <div class="col-12 lg:col-6">
+        <div class="card">
+          <h5>Page Views Over Time</h5>
+          
+          <!-- URL Filter Dropdown -->
+          <p-dropdown 
+            [options]="urls" 
+            [(ngModel)]="selectedUrl" 
+            placeholder="Select URL" 
+            (onChange)="onUrlFilterChange()">
+          </p-dropdown>
+      
+          <!-- Line Chart for Page Views Over Time -->
+          <p-chart type="line" [data]="pageViewsOverTimeData" [options]="pageViewsOverTimeOptions"></p-chart>
+        </div>
+      </div>
+      
 
 <!-- Top Pages by Views (Bar Chart) -->
 <div class="col-12 lg:col-6">

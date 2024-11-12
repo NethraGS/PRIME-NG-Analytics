@@ -9,6 +9,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import 'chartjs-adapter-date-fns';
+import { DropdownModule } from 'primeng/dropdown';
 
 // Register required chart.js modules
 Chart.register(...registerables, SankeyController, Flow);
@@ -17,7 +18,7 @@ Chart.register(...registerables, SankeyController, Flow);
   selector: 'app-analytics',
   templateUrl: './analytics.component.html',
   standalone: true,
-  imports: [TabViewModule, ChartModule, CommonModule, CalendarModule, FormsModule,TableModule],
+  imports: [TabViewModule, ChartModule, CommonModule, CalendarModule, FormsModule,TableModule,DropdownModule],
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
@@ -51,6 +52,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   startDate: Date = new Date('2024-11-01T00:00:00');  // Default start date with time
   endDate: Date = new Date('2024-11-12T23:59:59');    // Default end date with time
 eventDetails: any;
+selectedUrl: any;
+urls: any;
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -195,51 +198,37 @@ formatDatePageView(date: Date): string {
   const day = pad(date.getDate());
   return `${year}-${month}-${day}`; // Return the date in 'yyyy-MM-dd' format
 }
-// Method to fetch Page Views Over Time
+
+
 fetchPageViewsOverTimeData() {
-  const formattedStartDate = this.formatDatePageView(this.startDate); // Format date to 'yyyy-MM-dd'
-  const formattedEndDate = this.formatDatePageView(this.endDate); // Format date to 'yyyy-MM-dd'
+  const formattedStartDate = this.formatDatePageView(this.startDate);
+  const formattedEndDate = this.formatDatePageView(this.endDate);
 
   this.analyticsService.getPageViewsOverTime(formattedStartDate, formattedEndDate).subscribe((data) => {
-    // Convert data from object format to array format
-    if (!Array.isArray(data)) {
-      data = Object.entries(data).map(([date, pageViews]) => ({ date, pageViews }));
-    }
+    // Collect all unique URLs and format them for display in the dropdown
+    this.urls = Array.from(new Set(data.map((item: any) => this.formatUrlForDisplay(item.url))));
+    
+    // Default to showing all data if no URL is selected
+    const filteredData = this.selectedUrl ? data.filter((item: any) => this.formatUrlForDisplay(item.url) === this.selectedUrl) : data;
 
-    // Sort the data by date in ascending order
-    data.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    // Convert and structure the data for charting
+    const groupedData = this.groupDataByDate(filteredData, formattedStartDate, formattedEndDate);
 
-    // Ensure all dates between start and end date are represented, even those without views
-    const allDates = this.getAllDatesInRange(formattedStartDate, formattedEndDate);
-    const dataMap = data.reduce((acc: any, curr: any) => {
-      acc[curr.date] = curr.pageViews;
-      return acc;
-    }, {});
-
-    // Fill missing dates with zero page views
-    const filledData = allDates.map((date) => ({
-      date,
-      pageViews: dataMap[date] || 0,
-    }));
-
-    // Extract labels (dates) and page view counts for the chart
-    const timeLabels = filledData.map((item: any) => new Date(item.date).getTime());
-    const pageViewsCounts = filledData.map((item: any) => item.pageViews);
-
-    // Chart configuration
+    // Prepare chart data
     this.pageViewsOverTimeData = {
-      labels: timeLabels,
+      labels: groupedData.map((item: any) => item.date),
       datasets: [
         {
           label: 'Page Views Over Time',
-          data: pageViewsCounts,
+          data: groupedData.map((item: any) => item.pageViews),
           borderColor: '#42A5F5',
           fill: false,
-          tension: 0.1, // Smooth the curve
+          tension: 0.1,
         },
       ],
     };
 
+    // Chart options
     this.pageViewsOverTimeOptions = {
       responsive: true,
       maintainAspectRatio: false,
@@ -248,22 +237,51 @@ fetchPageViewsOverTimeData() {
           type: 'time',
           time: {
             unit: 'day',
-            tooltipFormat: 'yyyy-MM-dd', // Format tooltip
+            tooltipFormat: 'yyyy-MM-dd',
             displayFormats: {
-              day: 'yyyy-MM-dd', // Format for day display
+              day: 'yyyy-MM-dd',
             },
           },
         },
         y: {
           beginAtZero: true,
           ticks: {
-            stepSize: 20, // Customize step size for y-axis
+            stepSize: 20,
           },
         },
       },
     };
   });
 }
+
+// Helper function to format URLs for dropdown display
+formatUrlForDisplay(url: string): string {
+  if (url === '/') return 'Login';
+  return url.startsWith('#/') ? url.slice(2) : url;
+}
+
+
+  // Group data by date and fill missing dates with zero page views
+  groupDataByDate(data: any[], startDate: string, endDate: string) {
+    const allDates = this.getAllDatesInRange(startDate, endDate);
+    const dataMap = data.reduce((acc: any, curr: any) => {
+      const date = curr.date;
+      acc[date] = (acc[date] || 0) + curr.pageViews; // Sum page views for the same date
+      return acc;
+    }, {});
+
+    return allDates.map((date) => ({
+      date,
+      pageViews: dataMap[date] || 0,
+    }));
+  }
+
+  // Handle URL filter selection
+  onUrlFilterChange() {
+    this.fetchPageViewsOverTimeData(); // Fetch data again to apply filter
+  }
+
+    
 
 // Helper function to generate all dates between start and end date
 getAllDatesInRange(startDate: string, endDate: string) {
