@@ -8,6 +8,7 @@ import { SankeyController, Flow } from 'chartjs-chart-sankey';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
+import 'chartjs-adapter-date-fns';
 
 // Register required chart.js modules
 Chart.register(...registerables, SankeyController, Flow);
@@ -46,7 +47,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
   // Dates selected by user
   startDate: Date = new Date('2024-11-01T00:00:00');  // Default start date with time
-  endDate: Date = new Date('2024-11-10T23:59:59');    // Default end date with time
+  endDate: Date = new Date('2024-11-12T23:59:59');    // Default end date with time
 eventDetails: any;
 
   constructor(private analyticsService: AnalyticsService) {}
@@ -182,16 +183,31 @@ eventDetails: any;
     });
   }
 
+// Helper method to format dates in the required 'yyyy-MM-dd' format
+formatDatePageView(date: Date): string {
+  const pad = (num: number) => num < 10 ? `0${num}` : num;
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1); // Months are 0-based
+  const day = pad(date.getDate());
+  return `${year}-${month}-${day}`; // Return the date in 'yyyy-MM-dd' format
+}
+
 // Method to fetch Page Views Over Time
 fetchPageViewsOverTimeData() {
-  const formattedStartDate = this.formatDate(this.startDate);
-  const formattedEndDate = this.formatDate(this.endDate);
+  const formattedStartDate = this.formatDatePageView(this.startDate); // Format date to 'yyyy-MM-dd'
+  const formattedEndDate = this.formatDatePageView(this.endDate); // Format date to 'yyyy-MM-dd'
 
   this.analyticsService.getPageViewsOverTime(formattedStartDate, formattedEndDate).subscribe((data) => {
-    // Ensure the data contains 'date' and 'pageViews'
-    const timeLabels = data.map((item: any) => new Date(item.date).getTime());  // Ensure 'date' is in a format Chart.js can interpret
-    const pageViewsCounts = data.map((item: any) => item.pageViews);  // Ensure 'pageViews' is present
+    // Convert data from object format to array format
+    if (!Array.isArray(data)) {
+      data = Object.entries(data).map(([date, pageViews]) => ({ date, pageViews }));
+    }
 
+    // Extract labels and page views counts for the chart
+    const timeLabels = data.map((item: any) => new Date(item.date).getTime());
+    const pageViewsCounts = data.map((item: any) => item.pageViews);
+
+    // Chart configuration
     this.pageViewsOverTimeData = {
       labels: timeLabels,
       datasets: [
@@ -209,13 +225,12 @@ fetchPageViewsOverTimeData() {
       maintainAspectRatio: false,
       scales: {
         x: {
-          type: 'time',  // Make sure the 'time' scale is enabled
-          unit: 'day',
+          type: 'time',
           time: {
             unit: 'day',
-            tooltipFormat: 'll', // Use a readable format for tooltips
+            tooltipFormat: 'yyyy-MM-dd', // Compatible format for tooltips
             displayFormats: {
-              day: 'll', // Format for day display
+              day: 'yyyy-MM-dd', // Compatible format for day display
             },
           },
         },
@@ -227,15 +242,24 @@ fetchPageViewsOverTimeData() {
   });
 }
 
+
 // Method to fetch Top Pages by Views
 fetchTopPagesByViewsData() {
   const formattedStartDate = this.formatDate(this.startDate);
   const formattedEndDate = this.formatDate(this.endDate);
 
   this.analyticsService.getTopPagesByViews(formattedStartDate, formattedEndDate).subscribe((data) => {
-    // Ensure the data contains 'pageName' and 'pageViews'
-    const pageNames = data.map((item: any) => item.pageName);  // Ensure 'pageName' is present in the response
-    const pageViewsCounts = data.map((item: any) => item.pageViews);  // Ensure 'pageViews' is present
+    // Check if data is an array of objects with path-view pairs
+    if (Array.isArray(data) && typeof data[0] === 'object') {
+      data = data.map((item: any) => {
+        const [pageName, pageViews] = Object.entries(item)[0];
+        return { pageName, pageViews };
+      });
+    }
+
+    // Extract page names and view counts
+    const pageNames = data.map((item: any) => item.pageName);
+    const pageViewsCounts = data.map((item: any) => item.pageViews);
 
     this.topPagesByViewsData = {
       labels: pageNames,
@@ -259,6 +283,7 @@ fetchTopPagesByViewsData() {
     };
   });
 }
+
 
   ngOnDestroy() {
     // Clean up if needed
