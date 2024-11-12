@@ -7,6 +7,7 @@ import { Chart, registerables } from 'chart.js';
 import { SankeyController, Flow } from 'chartjs-chart-sankey';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
 
 // Register required chart.js modules
 Chart.register(...registerables, SankeyController, Flow);
@@ -15,7 +16,7 @@ Chart.register(...registerables, SankeyController, Flow);
   selector: 'app-analytics',
   templateUrl: './analytics.component.html',
   standalone: true,
-  imports: [TabViewModule, ChartModule, CommonModule,CalendarModule,FormsModule],
+  imports: [TabViewModule, ChartModule, CommonModule, CalendarModule, FormsModule,TableModule],
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
@@ -32,6 +33,12 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   pathAnalysisData: any;
   pathAnalysisOptions: any;
 
+  // For new charts (Page Views)
+  pageViewsOverTimeData: any;
+  topPagesByViewsData: any;
+  pageViewsOverTimeOptions: any;
+  topPagesByViewsOptions: any;
+
   barData: any;
   pieData: any;
   barOptions: any;
@@ -40,6 +47,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   // Dates selected by user
   startDate: Date = new Date('2024-11-01T00:00:00');  // Default start date with time
   endDate: Date = new Date('2024-11-10T23:59:59');    // Default end date with time
+eventDetails: any;
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -49,15 +57,16 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     this.initPathAnalysisChart();
     this.fetchEventOverviewData();
     this.fetchTopEventsData();
+    this.fetchPageViewsOverTimeData();
+    this.fetchTopPagesByViewsData();
+    
   }
 
   // Fetch the data based on selected start and end dates
   fetchAnalyticsData(): void {
-    // Convert dates to the required format (yyyy-MM-dd'T'HH:mm:ss)
     const formattedStartDate = this.formatDate(this.startDate);
     const formattedEndDate = this.formatDate(this.endDate);
 
-    // Fetch total sessions
     this.analyticsService.getTotalSessions(formattedStartDate, formattedEndDate).subscribe(
       (data) => {
         this.totalSessions = data;
@@ -67,7 +76,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       }
     );
 
-    // Fetch average session duration
     this.analyticsService.getAverageSessionDuration(formattedStartDate, formattedEndDate).subscribe(
       (data) => {
         this.averageSessionDuration = data;
@@ -77,7 +85,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       }
     );
 
-    // Fetch average sessions per user
     this.analyticsService.getAverageSessionsPerUser(formattedStartDate, formattedEndDate).subscribe(
       (data) => {
         this.averageSessionsPerUser = data;
@@ -105,7 +112,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       const response = await fetch('http://localhost:8080/api/preferred-paths');
       const paths = await response.json();
 
-      // Structure data for the Sankey chart
       const dataPoints = paths.map((path: any) => ({
         from: path.previousPage,
         to: path.currentPage,
@@ -138,6 +144,18 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  fetchEventOverviewData() {
+    this.analyticsService.getEventOverview().subscribe((data) => {
+      this.eventDetails = data.map((item: any) => ({
+        eventName: item[0],
+        eventCount: item[1],
+        totalUsers: item[2],
+        eventCountPerUser: item[1] / item[2],  // Calculate event count per user
+      }));
+    });
+  }
+
   fetchTopEventsData() {
     this.analyticsService.getTopEvents().subscribe((data) => {
       const labels = data.map((item: any) => item[0]);
@@ -149,53 +167,100 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
           {
             label: 'Top 5 Events',
             backgroundColor: '#42A5F5',
-            data: counts
-          }
-        ]
+            data: counts,
+          },
+        ],
       };
 
       this.barOptions = {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: { beginAtZero: true }
-        }
+          x: { beginAtZero: true },
+        },
       };
     });
   }
 
-  fetchEventOverviewData() {
-    this.analyticsService.getEventOverview().subscribe((data) => {
-      const eventTypeCountMap: { [key: string]: number } = {};
+// Method to fetch Page Views Over Time
+fetchPageViewsOverTimeData() {
+  const formattedStartDate = this.formatDate(this.startDate);
+  const formattedEndDate = this.formatDate(this.endDate);
 
-      data.forEach((item: any) => {
-        const eventType = item[0];
-        eventTypeCountMap[eventType] = (eventTypeCountMap[eventType] || 0) + item[3];
-      });
+  this.analyticsService.getPageViewsOverTime(formattedStartDate, formattedEndDate).subscribe((data) => {
+    // Ensure the data contains 'date' and 'pageViews'
+    const timeLabels = data.map((item: any) => new Date(item.date).getTime());  // Ensure 'date' is in a format Chart.js can interpret
+    const pageViewsCounts = data.map((item: any) => item.pageViews);  // Ensure 'pageViews' is present
 
-      this.pieData = {
-        labels: Object.keys(eventTypeCountMap),
-        datasets: [
-          {
-            data: Object.values(eventTypeCountMap),
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#F7464A']
-          }
-        ]
-      };
+    this.pageViewsOverTimeData = {
+      labels: timeLabels,
+      datasets: [
+        {
+          label: 'Page Views Over Time',
+          data: pageViewsCounts,
+          borderColor: '#42A5F5',
+          fill: false,
+        },
+      ],
+    };
 
-      this.pieOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'top'
-          }
-        }
-      };
-    });
-  }
+    this.pageViewsOverTimeOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          type: 'time',  // Make sure the 'time' scale is enabled
+          unit: 'day',
+          time: {
+            unit: 'day',
+            tooltipFormat: 'll', // Use a readable format for tooltips
+            displayFormats: {
+              day: 'll', // Format for day display
+            },
+          },
+        },
+        y: {
+          beginAtZero: true,
+        },
+      },
+    };
+  });
+}
+
+// Method to fetch Top Pages by Views
+fetchTopPagesByViewsData() {
+  const formattedStartDate = this.formatDate(this.startDate);
+  const formattedEndDate = this.formatDate(this.endDate);
+
+  this.analyticsService.getTopPagesByViews(formattedStartDate, formattedEndDate).subscribe((data) => {
+    // Ensure the data contains 'pageName' and 'pageViews'
+    const pageNames = data.map((item: any) => item.pageName);  // Ensure 'pageName' is present in the response
+    const pageViewsCounts = data.map((item: any) => item.pageViews);  // Ensure 'pageViews' is present
+
+    this.topPagesByViewsData = {
+      labels: pageNames,
+      datasets: [
+        {
+          label: 'Top Pages by Views',
+          data: pageViewsCounts,
+          backgroundColor: '#FFA726',
+        },
+      ],
+    };
+
+    this.topPagesByViewsOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          beginAtZero: true,
+        },
+      },
+    };
+  });
+}
 
   ngOnDestroy() {
     // Clean up if needed
   }
-}
+}  

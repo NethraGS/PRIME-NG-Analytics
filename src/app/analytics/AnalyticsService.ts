@@ -27,7 +27,7 @@ export class AnalyticsService {
   }
 
   getEventOverview(): Observable<any[]> {
-    const url = 'http://localhost:8080/api/event-overview';
+    const url = 'http://localhost:8080/api/event-statistics';
     return this.http.get<any[]>(url);
   }
 
@@ -36,7 +36,6 @@ export class AnalyticsService {
     const url = 'http://localhost:8080/api/top-events';
     return this.http.get<any[]>(url);
   }
-
 
   // New method for Total Page Views
   getTotalPageViews(startDate: string, endDate: string): Observable<number> {
@@ -48,13 +47,17 @@ export class AnalyticsService {
     return this.http.get<any[]>(`http://localhost:8080/api/analytics/unique-page-views?startDate=${startDate}&endDate=${endDate}`);
   }
 
-  // New method for Top Pages by Views
+  getPageViewTrends(startDate: string, endDate: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/page-view-trends?startDate=${startDate}&endDate=${endDate}`);
+  }
+
+  getPageViewsOverTime(startDate: string, endDate: string): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:8080/api/analytics/page-view-trends?startDate=${startDate}&endDate=${endDate}`);
+  }
+  
   getTopPagesByViews(startDate: string, endDate: string): Observable<any[]> {
     return this.http.get<any[]>(`http://localhost:8080/api/analytics/top-pages?startDate=${startDate}&endDate=${endDate}`);
   }
+  
 
-  // New method for Page View Trends
-  getPageViewTrends(startDate: string, endDate: string): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:8080/api/analytics/page-view-trends?startDate=${startDate}&endDate=${endDate}`);
-  }
 }

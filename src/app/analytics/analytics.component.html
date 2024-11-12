@@ -1,6 +1,5 @@
 <p-tabView>
-  <p-tabView>
-    <!-- User Activity and Demographics Tab -->
+  
     <p-tabPanel header="User Activity & Demographics">
       <h3>User Activity & Demographics</h3>
       <div class="grid">
@@ -10,36 +9,37 @@
             <h5>Top 5 Events</h5>
             <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
           </div>
-        </div></div>
-
-         <!-- Event Overview - Pie Chart -->
-      <div class="col-12 lg:col-6">
-        <div class="card flex flex-column align-items-center">
-          <h5 class="text-left w-full">Event Overview</h5>
-          <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
         </div>
+  
+      
+  
+      <!-- Event Details Table -->
+      <div class="card">
+        <h5>Event Details</h5>
+        <p-table [value]="eventDetails" responsive="true" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Event Name</th>
+              <th>Event Count</th>
+              <th>Total Users</th>
+              <th>Event Count per User</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-event>
+            <tr>
+              <td>{{ event.eventName }}</td>
+              <td>{{ event.eventCount }}</td>
+              <td>{{ event.totalUsers }}</td>
+              <td>{{ event.eventCountPerUser }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
+    </div>
     </p-tabPanel>
-  
-    <!-- User Action Tracking Tab -->
-    <p-tabPanel header="User Action Tracking">
-      <h3>User Action Tracking</h3>
-      <!-- Top Events List -->
-      <div class="top-events">
-        <h4>Top Events</h4>
-        <ul>
-          <li *ngFor="let event of topEvents">
-            {{ event[0] }}: {{ event[1] }} times
-          </li>
-        </ul>
-      </div>
-    </p-tabPanel>
-  
-   
-  
 
-  <!-- Analytics Data Tab -->
-  <p-tabPanel header="Analytics Dashboard">
+   <!-- Analytics Data Tab -->
+   <p-tabPanel header="Analytics Dashboard">
     <h3>Analytics Dashboard</h3>
 
     <!-- Date Picker for User -->
@@ -103,11 +103,31 @@
     </div>
   </p-tabPanel>
 
-  <!-- User Journeys and Behavior Flow Tab -->
-  <p-tabPanel header="User Journeys & Behavior Flow">
-    <div class="analytics-container">
-      <!-- Sankey Flow Chart for User Journeys -->
+  <p-tabPanel header="Path Analysis">
+    <h3>Path Analysis</h3>
+    <div class="card">
       <p-chart type="sankey" [data]="pathAnalysisData" [options]="pathAnalysisOptions"></p-chart>
     </div>
   </p-tabPanel>
-</p-tabView>
+
+  <p-tabPanel header="Page Views">
+    <h3>Page Views</h3>
+    <div class="grid">
+   <!-- Page Views Over Time (Line Chart) -->
+<div class="col-12 lg:col-6">
+  <div class="card">
+    <h5>Page Views Over Time</h5>
+    <p-chart type="line" [data]="pageViewsOverTimeData" [options]="pageViewsOverTimeOptions"></p-chart>
+  </div>
+</div>
+
+<!-- Top Pages by Views (Bar Chart) -->
+<div class="col-12 lg:col-6">
+  <div class="card">
+    <h5>Top Pages by Views</h5>
+    <p-chart type="bar" [data]="topPagesByViewsData" [options]="topPagesByViewsOptions"></p-chart>
+  </div>
+</div>
+</div>
+</p-tabPanel>
+  
