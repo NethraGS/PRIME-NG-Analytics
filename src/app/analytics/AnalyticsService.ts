@@ -45,4 +45,8 @@ export class AnalyticsService {
   getPageViewStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/pageview/stats`);
   }
+
+  getTotalTimeSpent(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/total-time-spent`);
+  }
 }

@@ -36,6 +36,7 @@
         <th pSortableColumn="views">Views <p-sortIcon field="views"></p-sortIcon></th>
         <th pSortableColumn="users">Users <p-sortIcon field="users"></p-sortIcon></th>
         <th pSortableColumn="viewsPerUser">Views per User <p-sortIcon field="viewsPerUser"></p-sortIcon></th>
+        <th pSortableColumn="totalTimeSpentMinutes">Time On Page (in min)<p-sortIcon field="totalTimeSpentMinutes"></p-sortIcon></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-stat>
@@ -44,6 +45,8 @@
         <td>{{ stat.views }}</td>
         <td>{{ stat.users }}</td>
         <td>{{ stat.viewsPerUser }}</td>
+        <td>{{stat.totalTimeSpentMinutes}}
+        
       </tr>
     </ng-template>
   </p-table>
@@ -157,6 +160,16 @@
         </div>
       </div>
     </div>
+
+   
+    <div class="card">
+      <h5>Time Spent on Page</h5>
+      <div id="pieChart" style="width: 65vw; height: 500px;"></div> <!-- Increased height -->
+    </div>
+    
+    
+    
+    
   </p-tabPanel>
 
   <p-tabPanel header="Path Analysis">

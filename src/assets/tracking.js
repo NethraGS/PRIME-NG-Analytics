@@ -293,6 +293,59 @@
             }).catch(error => console.error('Session duration storage error:', error));
         },
 
+        trackNavigation() {
+            const trackTimeOnPage = () => {
+                const currentTime = Date.now();
+                const timeSpent = (currentTime - this.lastTimestamp) / 1000;
+
+                if (this.lastTrackedUrl) {
+                    this.sendTimeOnPage(this.lastTrackedUrl, timeSpent);
+                }
+
+                this.lastTimestamp = currentTime;
+                this.lastTrackedUrl = window.location.href;
+            };
+
+            window.addEventListener('popstate', trackTimeOnPage);
+
+            const originalPushState = history.pushState;
+            history.pushState = function (state, title, url) {
+                originalPushState.apply(this, arguments);
+                trackTimeOnPage();
+            };
+
+            const originalReplaceState = history.replaceState;
+            history.replaceState = function (state, title, url) {
+                originalReplaceState.apply(this, arguments);
+                trackTimeOnPage();
+            };
+        },
+
+        sendTimeOnPage(url, timeSpent) {
+            const data = {
+                url,
+                timeSpent,
+                timestamp: new Date().toISOString(),
+                userId: this.getUserData().userId,
+                userRole: this.getUserData().userRole,
+            };
+
+            console.log("Time on Page:", data);
+
+            fetch('http://localhost:8080/api/analytics/time-on-page', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Time on page tracking error:', response.status, response.statusText);
+                    throw new Error('Network response was not ok');
+                }
+            }).catch(error => console.error('Time on page tracking error:', error));
+        },
+
         getUserData() {
             const userId = sessionStorage.getItem('userId');
             const userRole = sessionStorage.getItem('userRole');

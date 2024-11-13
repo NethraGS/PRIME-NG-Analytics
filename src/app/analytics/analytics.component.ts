@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { AnalyticsService } from './AnalyticsService';
 import { TabViewModule } from 'primeng/tabview';
 import { ChartModule } from 'primeng/chart';
@@ -10,8 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import 'chartjs-adapter-date-fns';
 import { DropdownModule } from 'primeng/dropdown';
+import * as echarts from 'echarts';
 
-// Register required chart.js modules
+
+
 Chart.register(...registerables, SankeyController, Flow);
 
 @Component({
@@ -22,7 +24,9 @@ Chart.register(...registerables, SankeyController, Flow);
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
-  // Analytics Data
+
+  @ViewChild('pieChartContainer') pieChartContainer: ElementRef | undefined;
+ 
   topNpageviews:number = 5;
   totalSessions: number = 0;
   averageSessionDuration: number = 0;
@@ -33,11 +37,11 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   topEvents: any[] = [];
   pieChartData: any;
 
-  // For Path Analysis (Sankey Chart)
+  
   pathAnalysisData: any;
   pathAnalysisOptions: any;
 
-  // For new charts (Page Views)
+  
   pageViewsOverTimeData: any;
   topPagesByViewsData: any;
   pageViewsOverTimeOptions: any;
@@ -48,18 +52,23 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   barOptions: any;
   pieOptions: any;
 
-  // Dates selected by user
+  pieChartLabels: any;
+  pieChartOptions: any;
+  
+
+  
   startDate: Date = new Date('2024-11-04T00:00:00');  // Default start date with time
   endDate: Date = new Date('2024-11-13T23:59:59');    // Default end date with time
 eventDetails: any;
 selectedUrl: any;
 urls: any;
-eventData: any[] = []; // Holds the raw event data
+totalTimeSpent: any;
+eventData: any[] = []; 
 
   constructor(private analyticsService: AnalyticsService) {}
 
   ngOnInit(): void {
-    // Call the methods to fetch data on initial load
+ 
     this.fetchAnalyticsData();
     this.initPathAnalysisChart();
     this.fetchEventOverviewData();
@@ -67,8 +76,28 @@ eventData: any[] = []; // Holds the raw event data
     this.fetchPageViewsOverTimeData();
     this.fetchTopPagesByViewsData();
     this.fetchPageViewStats();
-    
+    this.fetchPieChartData();
+
   }
+  ngAfterViewInit(): void {
+    // Now, you can safely initialize the chart once the DOM is available
+    if (this.pieChartContainer) {
+      this.renderPieChart();
+    }
+  }
+
+  fetchPieChartData(): void {
+    this.analyticsService.getTotalTimeSpent().subscribe(
+      data => {
+        // Once the data is fetched, process it and update the chart
+        this.processPieChartData(data);
+      },
+      error => {
+        console.error('Error fetching data from backend:', error);
+      }
+    );
+  }
+  
 
   // Fetch the data based on selected start and end dates
   fetchAnalyticsData(): void {
@@ -86,7 +115,7 @@ eventData: any[] = []; // Holds the raw event data
 
     this.analyticsService.getAverageSessionDuration(formattedStartDate, formattedEndDate).subscribe(
       (data) => {
-        this.averageSessionDuration = Math.trunc((data/60) * 100) / 100;
+        this.averageSessionDuration = Math.trunc((data/6000) * 100) / 100;
       },
       (error) => {
         console.error('Error fetching average session duration:', error);
@@ -400,7 +429,77 @@ fetchTopPagesByViewsData() {
   });
 }
 
+ 
+processPieChartData(data: any[]): void {
+  // Process the data to convert seconds to minutes
+  const processedData = data.map(item => {
+    const formattedUrl = item[0].replace('http://localhost:4200/#/', ''); // Format URL
+    const minutes = (item[1] / 60).toFixed(2); // Convert seconds to minutes
+    return { label: formattedUrl, value: parseFloat(minutes) };
+  });
 
+  // Prepare the data for ECharts
+  const chartData = processedData.map(item => ({
+    name: item.label,
+    value: item.value,
+  }));
+
+  // Initialize the chart options
+  this.pieChartData = chartData;
+
+  // You can set colors dynamically, here I'm using a fixed set of colors
+  const rootStyle = window.getComputedStyle(document.documentElement);
+
+  // ECharts option for pie chart
+  this.pieChartOptions = {
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c} ({d}%)',
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+    },
+    series: [
+      {
+        name: 'Time Spent',
+        type: 'pie',
+        radius: '50%',
+        data: this.pieChartData,
+        itemStyle: {
+          normal: {
+            color: function (params: any) {
+              // You can map to CSS colors or use a dynamic color function
+              const colors = [
+                rootStyle.getPropertyValue('--indigo-500').trim(),
+                rootStyle.getPropertyValue('--purple-500').trim(),
+                rootStyle.getPropertyValue('--teal-500').trim(),
+                rootStyle.getPropertyValue('--orange-500').trim(),
+                rootStyle.getPropertyValue('--blue-500').trim(),
+                rootStyle.getPropertyValue('--green-500').trim(),
+                rootStyle.getPropertyValue('--red-500').trim(),
+                rootStyle.getPropertyValue('--yellow-500').trim(),
+                rootStyle.getPropertyValue('--pink-500').trim(),
+                rootStyle.getPropertyValue('--cyan-500').trim(),
+                
+              ];
+              return colors[params.dataIndex % colors.length];
+            },
+          },
+        },
+      },
+    ],
+  };
+  
+  // Render the chart after the options are set
+  this.renderPieChart();
+}
+
+renderPieChart(): void {
+  const chartDom = document.getElementById('pieChart')!;
+  const myChart = echarts.init(chartDom);
+  myChart.setOption(this.pieChartOptions);
+}
 
   ngOnDestroy() {
     // Clean up if needed
