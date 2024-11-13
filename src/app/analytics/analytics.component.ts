@@ -49,8 +49,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   pieOptions: any;
 
   // Dates selected by user
-  startDate: Date = new Date('2024-11-01T00:00:00');  // Default start date with time
-  endDate: Date = new Date('2024-11-12T23:59:59');    // Default end date with time
+  startDate: Date = new Date('2024-11-04T00:00:00');  // Default start date with time
+  endDate: Date = new Date('2024-11-13T23:59:59');    // Default end date with time
 eventDetails: any;
 selectedUrl: any;
 urls: any;

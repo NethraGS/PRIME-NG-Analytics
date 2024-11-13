@@ -1,6 +1,5 @@
 <p-tabView>
   <p-tabPanel header="Page Views">
-    <h3>Page Views</h3>
     <div class="grid">
       <div class="col-12 lg:col-6">
         <div class="card">
@@ -28,30 +27,28 @@
   </div>
 </div>
 </div>
+<div class="card">
+  <h5>Page View Statistics</h5>
+  <p-table [value]="pageViewStats" [paginator]="true" [rows]="5" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Page Path</th>
+        <th pSortableColumn="views">Views <p-sortIcon field="views"></p-sortIcon></th>
+        <th pSortableColumn="users">Users <p-sortIcon field="users"></p-sortIcon></th>
+        <th pSortableColumn="viewsPerUser">Views per User <p-sortIcon field="viewsPerUser"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stat>
+      <tr>
+        <td>{{ stat.pagePath }}</td>
+        <td>{{ stat.views }}</td>
+        <td>{{ stat.users }}</td>
+        <td>{{ stat.viewsPerUser }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
 
-<!-- Page View Statistics Table -->
-    <div class="card mt-4">
-      <h5>Page View Statistics</h5>
-<p-table [value]="pageViewStats" responsive="true" styleClass="p-datatable-sm">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Page Path</th>
-      <th>Views</th>
-      <th>Users</th>
-      <th>Views per User</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-stat>
-    <tr>
-      <td>{{ stat.pagePath }}</td>
-      <td>{{ stat.views }}</td>
-      <td>{{ stat.users }}</td>
-      <td>{{ stat.viewsPerUser }}</td>
-    </tr>
-  </ng-template>
-</p-table>
-
-    </div>
 </p-tabPanel>
     <p-tabPanel header="Events">
      
@@ -72,17 +69,15 @@
       
   
       
-  
-      <!-- Event Details Table -->
       <div class="card">
-       
-        <p-table [value]="eventDetails" responsive="true" styleClass="p-datatable-sm">
+        <h5>Event Details</h5>
+        <p-table [value]="eventDetails" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm">
           <ng-template pTemplate="header">
             <tr>
-              <th>Event Name</th>
-              <th>Event Count</th>
-              <th>Total Users</th>
-              <th>Event Count per User</th>
+              <th pSortableColumn="eventName">Event Name <p-sortIcon field="eventName"></p-sortIcon></th>
+              <th pSortableColumn="eventCount">Event Count <p-sortIcon field="eventCount"></p-sortIcon></th>
+              <th pSortableColumn="totalUsers">Total Users <p-sortIcon field="totalUsers"></p-sortIcon></th>
+              <th pSortableColumn="eventCountPerUser">Event Count per User <p-sortIcon field="eventCountPerUser"></p-sortIcon></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-event>
@@ -93,8 +88,14 @@
               <td>{{ event.eventCountPerUser }}</td>
             </tr>
           </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No events found.</td>
+            </tr>
+          </ng-template>
         </p-table>
       </div>
+      
       </p-tabPanel>
 
    <!-- Analytics Data Tab -->

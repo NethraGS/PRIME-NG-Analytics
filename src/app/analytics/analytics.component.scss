@@ -50,3 +50,39 @@
     transform: translateY(-2px); 
     transition: transform 0.2s ease-in-out;
 }
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    color: #495057;
+    font-weight: 600;
+    background-color: #f9fafb;
+  }
+  
+  :host ::ng-deep .p-datatable-striped .p-datatable-tbody > tr:nth-child(odd) {
+    background-color: #f7f9fa;
+  }
+  
+  :host ::ng-deep .p-table .p-sortable-column {
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  :host ::ng-deep .p-table .p-sortable-column:hover {
+    color: #007ad9;
+  }
+  
+  :host ::ng-deep .p-chart {
+    padding: 1.5rem;
+  }
+  
+  :host ::ng-deep .card h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  .date-picker-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  
