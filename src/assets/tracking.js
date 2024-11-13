@@ -17,7 +17,7 @@
         setupEventListeners() {
             if (this.listenersInitialized) return;
 
-            // Intercept login API calls to start the session on successful login
+            
             this.interceptFetchForLogin();
 
             document.addEventListener('click', (event) => {
@@ -124,22 +124,22 @@
         interceptFetchForLogin() {
             const originalFetch = window.fetch;
             window.fetch = (...args) => {
-                // Ensure args[0] is a string before calling .includes()
-                if (typeof args[0] === 'string' && args[0].includes('/api/login')) { // Replace with your actual login API endpoint
+          
+                if (typeof args[0] === 'string' && args[0].includes('/api/login')) { 
                     return originalFetch(...args)
                         .then(async response => {
                             if (response.ok) {
                                 const data = await response.json();
                                 if (data.message === "Login successful") {
-                                    // Correctly refer to 'startSession' within the 'tracking' object
-                                    tracking.startSession(data.userId, data.role); // Assuming 'tracking' is in the global scope
+                                  
+                                    tracking.startSession(data.userId, data.role); 
                                 }
                             }
                             return response;
                         })
                         .catch(error => {
                             console.error('Error during login fetch interception:', error);
-                            throw error; // Re-throw the error to allow further handling
+                            throw error; 
                         });
                 }
                 return originalFetch(...args);
@@ -173,7 +173,7 @@
                 };
                 this.trackEvent('navigation', eventData);
 
-                // Track the user journey (current and previous page)
+               
                 const userJourneyData = {
                     userId: this.getUserData().userId,
                     currentPage: window.location.href,
@@ -181,9 +181,9 @@
                     timestamp: new Date().toISOString(),
                 };
 
-                // Send user journey data to the backend
+               
                 this.sendUserJourneyToBackend(userJourneyData);
-                this.lastTrackedUrl = window.location.href; // Update the lastTrackedUrl after sending data
+                this.lastTrackedUrl = window.location.href; 
             });
         },
 
@@ -205,7 +205,7 @@
         },
 
         sendDataToBackend(event) {
-            fetch('http://localhost:8080/api/track-event', {
+            fetch('http://192.168.56.192:8080/api/track-event', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -220,7 +220,7 @@
         },
 
         sendUserJourneyToBackend(userJourneyData) {
-            fetch('http://localhost:8080/api/track-user-journey', {
+            fetch('http://192.168.56.192:8080/api/track-user-journey', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -263,8 +263,8 @@
                 }
             });
 
-            // Detect logout action (you may need to adapt this based on your logout button)
-            const logoutButton = document.querySelector('#logout'); // Adjust selector
+          
+            const logoutButton = document.querySelector('#logout'); 
             if (logoutButton) {
                 logoutButton.addEventListener('click', () => {
                     sessionStorage.setItem('logout', true);
@@ -275,7 +275,7 @@
         storeSessionDurationInBackend(sessionDuration) {
             const userId = this.getUserData().userId;
             const userRole = this.getUserData().userRole;
-            fetch('http://localhost:8080/api/sessions/store', {
+            fetch('http://192.168.56.192:8080/api/sessions/store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -332,7 +332,7 @@
 
             console.log("Time on Page:", data);
 
-            fetch('http://localhost:8080/api/analytics/time-on-page', {
+            fetch('http://192.168.56.192:8080/api/analytics/time-on-page', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -356,17 +356,17 @@
         }
     };
 
-// Track initial page load
+
 function trackPageView() {
-  // Get session, user ID, and user role from sessionStorage or other source
+ 
   const sessionId = sessionStorage.getItem('sessionId') || 'unknown';
   const userId = sessionStorage.getItem('userId') || 'guest';
   const userRole = sessionStorage.getItem('userRole') || 'visitor';
 
-  // Track the initial page load
+ 
   sendPageView(window.location.pathname, sessionId, userId, userRole);
 
-  // Override pushState and replaceState to detect route changes
+  
   const originalPushState = history.pushState;
   history.pushState = function (state, title, url) {
     originalPushState.apply(this, arguments);
@@ -379,25 +379,25 @@ function trackPageView() {
     onUrlChange(url, sessionId, userId, userRole);
   };
 
-  // Detect back/forward button navigation
+ 
   window.addEventListener('popstate', function () {
     onUrlChange(window.location.pathname, sessionId, userId, userRole);
   });
 }
 
-// Helper function to handle URL changes
+
 function onUrlChange(url, sessionId, userId, userRole) {
   sendPageView(url, sessionId, userId, userRole);
 }
 
-// Function to send the page view to your backend API
+
 function sendPageView(url, sessionId, userId, userRole) {
   console.log("Tracking page view:", url, "Session ID:", sessionId, "User ID:", userId, "User Role:", userRole);
 
-  // Format the timestamp in the required format (yyyy-MM-dd'T'HH:mm:ss.SSS)
-  const timestamp = new Date().toISOString().slice(0, -1); // removes the 'Z' for millisecond precision
+  
+  const timestamp = new Date().toISOString().slice(0, -1); 
 
-  fetch('http://localhost:8080/api/analytics/track-page-view', {
+  fetch('http://192.168.56.192:8080/api/analytics/track-page-view', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -412,7 +412,7 @@ function sendPageView(url, sessionId, userId, userRole) {
   });
 }
 
-// Initialize tracking
+
 trackPageView();
 
 

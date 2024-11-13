@@ -43,7 +43,7 @@ export class LoginComponent {
       password: this.password
     };
 
-    this.http.post<LoginResponse>('http://localhost:8080/api/login', loginData).subscribe(
+    this.http.post<LoginResponse>('http://192.168.56.192:8080/api/login', loginData).subscribe(
       (response) => {
         console.log('Login successful:', response);
 

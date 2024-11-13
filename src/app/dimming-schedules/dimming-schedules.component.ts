@@ -64,7 +64,7 @@ export class DimmingSchedulesComponent implements OnInit {
     { label: 'Custom', value: 'custom' }
   ];
 
-  private apiUrl = 'http://localhost:8080/api/schedules'; 
+  private apiUrl = 'http://192.168.56.192:8080/api/schedules'; 
 
   constructor(private http: HttpClient) {}
 

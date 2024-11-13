@@ -43,7 +43,7 @@ export class MapviewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fetchStreetlights() {
-    this.http.get<any[]>('http://localhost:8080/api/streetlights').subscribe(
+    this.http.get<any[]>('http://192.168.56.192:8080/api/streetlights').subscribe(
       (data) => {
         this.streetlights = data;
         this.addMarkers();

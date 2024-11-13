@@ -146,7 +146,7 @@ eventData: any[] = [];
   // Initialize Path Analysis Chart (Sankey)
   async initPathAnalysisChart() {
     try {
-      const response = await fetch('http://localhost:8080/api/preferred-paths');
+      const response = await fetch('http://192.168.56.192:8080/api/preferred-paths');
       const paths = await response.json();
 
       const dataPoints = paths.map((path: any) => ({

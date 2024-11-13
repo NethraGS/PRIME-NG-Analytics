@@ -33,7 +33,7 @@ export class UserProfileComponent implements OnInit {
   fetchUserDetails(): void {
     const userId = this.userService.userId; 
     if (userId) {
-      this.http.get<User>(`http://localhost:8080/api/users/${userId}`).subscribe({
+      this.http.get<User>(`http://192.168.56.192:8080/api/users/${userId}`).subscribe({
         next: (data) => this.user = data,
         error: (error) => console.error('Error fetching user data:', error)
       });

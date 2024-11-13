@@ -67,7 +67,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {}
 
   loadProfiles() {
-    this.http.get<DimmingProfile[]>('http://localhost:8080/api/profiles').subscribe(
+    this.http.get<DimmingProfile[]>('http://192.168.56.192:8080/api/profiles').subscribe(
       (profiles) => (this.dimmingProfiles = profiles),
       (error) => console.error('Error loading profiles', error)
     );
@@ -92,7 +92,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
 
   saveProfile() {
     if (this.newProfile.id) {
-      this.http.put(`http://localhost:8080/api/profiles/${this.newProfile.id}`, this.newProfile).subscribe(
+      this.http.put(`http://192.168.56.192:8080/api/profiles/${this.newProfile.id}`, this.newProfile).subscribe(
         () => {
           this.loadProfiles();
           this.resetProfile();
@@ -102,7 +102,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
         (error) => console.error('Error saving profile', error)
       );
     } else {
-      this.http.post('http://localhost:8080/api/profiles', this.newProfile).subscribe(
+      this.http.post('http://192.168.56.192:8080/api/profiles', this.newProfile).subscribe(
         () => {
           this.loadProfiles();
           this.resetProfile();
@@ -120,7 +120,7 @@ export class DimmingProfilesComponent implements AfterViewInit, OnDestroy {
   }
 
   deleteProfile(id: number) {
-    this.http.delete(`http://localhost:8080/api/profiles/${id}`).subscribe(
+    this.http.delete(`http://192.168.56.192:8080/api/profiles/${id}`).subscribe(
       () => {
         this.loadProfiles();
        

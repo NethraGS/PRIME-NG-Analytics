@@ -28,7 +28,7 @@ interface Streetlight {
 })
 export class AssetTableComponent implements OnInit {
   streetlights: Streetlight[] = [];
-  private apiUrl = 'http://localhost:8080/api/streetlights';
+  private apiUrl = 'http://192.168.56.192:8080/api/streetlights';
 
   constructor(private http: HttpClient) {}
 

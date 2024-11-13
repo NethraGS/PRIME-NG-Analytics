@@ -87,7 +87,7 @@ logout() {
     sessionEndTime: this.formatDate(new Date())
   };
 
-  this.http.post('http://localhost:8080/api/sessions/store', sessionData)
+  this.http.post('http://192.168.56.192:8080/api/sessions/store', sessionData)
     .subscribe(
       response => {
         console.log('Session data saved successfully:', response);

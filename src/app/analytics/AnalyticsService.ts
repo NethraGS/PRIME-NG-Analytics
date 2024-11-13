@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AnalyticsService {
-  private apiUrl = 'http://localhost:8080/api/analytics';
+  private apiUrl = 'http://192.168.56.192:8080/api/analytics';
 
   constructor(private http: HttpClient) {}
 
@@ -23,11 +23,11 @@ export class AnalyticsService {
   }
 
   getEventOverview(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8080/api/event-statistics');
+    return this.http.get<any[]>('http://192.168.56.192:8080/api/event-statistics');
   }
 
   getTopEvents(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8080/api/top-events');
+    return this.http.get<any[]>('http://192.168.56.192:8080/api/top-events');
   }
 
   getPageViewsOverTime(startDate: string, endDate: string): Observable<any[]> {
@@ -39,7 +39,7 @@ export class AnalyticsService {
   }
 
   getPathAnalysisData(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8080/api/path-analysis');
+    return this.http.get<any[]>('http://192.168.56.192:8080/api/path-analysis');
   }
 
   getPageViewStats(): Observable<any> {
