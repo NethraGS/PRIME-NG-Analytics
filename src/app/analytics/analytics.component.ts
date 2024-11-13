@@ -54,6 +54,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 eventDetails: any;
 selectedUrl: any;
 urls: any;
+eventData: any[] = []; // Holds the raw event data
 
   constructor(private analyticsService: AnalyticsService) {}
 
@@ -166,29 +167,64 @@ urls: any;
 
   fetchTopEventsData() {
     this.analyticsService.getTopEvents().subscribe((data) => {
-      const labels = data.map((item: any) => item[0]);
-      const counts = data.map((item: any) => item[1]);
-
+      // Collect all unique URLs from the data and format for the dropdown
+      this.urls = Array.from(new Set(data.map((item: any) => item[1])))
+        .filter(url => url != null)  // Ensure no null values
+        .map(url => ({ label: url || 'No URL', value: url || '' })); // Add label and value
+  
+      // Process data for the bar chart as before
+      const filteredData = this.selectedUrl
+        ? data.filter((item: any) => item[1] === this.selectedUrl)
+        : data;
+  
+      const groupedData = this.groupDataByAction(filteredData);
+  
       this.barData = {
-        labels: labels,
+        labels: groupedData.map((item: any) => item.action),
         datasets: [
           {
-            label: 'Top 5 Events',
+            label: 'Event Count',
+            data: groupedData.map((item: any) => item.count),
             backgroundColor: '#42A5F5',
-            data: counts,
           },
         ],
       };
-
+  
       this.barOptions = {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: { beginAtZero: true },
+          x: { title: { display: true, text: 'Actions' } },
+          y: { title: { display: true, text: 'Event Count' }, beginAtZero: true },
         },
       };
     });
   }
+  
+
+  // Helper function to group events by action type (e.g., "click", "scroll", etc.)
+  groupDataByAction(data: any[]) {
+    const grouped = data.reduce((acc: any, item: any) => {
+      const action = item[0]; // Action type (click, scroll, etc.)
+      if (!acc[action]) {
+        acc[action] = 0;
+      }
+      acc[action] += item[2]; // Add the count (item[2]) to the corresponding action
+      return acc;
+    }, {});
+
+    // Convert the grouped data to an array of objects
+    return Object.keys(grouped).map((action) => ({
+      action,
+      count: grouped[action],
+    }));
+  }
+
+  // Method to handle URL change in dropdown
+  onUrlFilterChange1() {
+    this.fetchTopEventsData();
+  }
+
 
 // Helper method to format dates in the required 'yyyy-MM-dd' format
 formatDatePageView(date: Date): string {

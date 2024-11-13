@@ -55,14 +55,21 @@
 </p-tabPanel>
     <p-tabPanel header="Events">
      
-      <div class="grid">
-        <!-- Top 5 Events - Horizontal Bar Chart -->
-        <div class="col-12 lg:col-6">
-          <div class="card">
-            <h5>Top 5 Events</h5>
-            <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
-          </div>
-        </div>
+      <div class="card">
+        <h5>Top 5 Events</h5>
+      
+        <!-- URL Filter Dropdown -->
+        <p-dropdown 
+          [options]="urls" 
+          [(ngModel)]="selectedUrl" 
+          placeholder="Select URL" 
+          (onChange)="onUrlFilterChange1()">
+        </p-dropdown>
+      
+        <!-- Horizontal Bar Chart for Top Events -->
+        <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
+      </div>
+      
   
       
   
@@ -88,8 +95,7 @@
           </ng-template>
         </p-table>
       </div>
-    </div>
-    </p-tabPanel>
+      </p-tabPanel>
 
    <!-- Analytics Data Tab -->
    <p-tabPanel header="Sessions">
