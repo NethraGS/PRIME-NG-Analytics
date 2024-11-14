@@ -3,23 +3,16 @@
     <div class="grid">
       <div class="col-12 lg:col-6">
         <div class="card">
-          <h5>Page Views Over Time</h5>
-          
-          <!-- URL Filter Dropdown -->
+          <h5>Page Views Over Time</h5>    
           <p-dropdown 
             [options]="urls" 
             [(ngModel)]="selectedUrl" 
             placeholder="Select URL" 
             (onChange)="onUrlFilterChange()">
-          </p-dropdown>
-      
-          <!-- Line Chart for Page Views Over Time -->
+          </p-dropdown> 
           <p-chart type="line" [data]="pageViewsOverTimeData" [options]="pageViewsOverTimeOptions"></p-chart>
         </div>
       </div>
-      
-
-<!-- Top Pages by Views (Bar Chart) -->
 <div class="col-12 lg:col-6">
   <div class="card">
     <h5>Top  Pages by Views</h5>
@@ -45,8 +38,7 @@
         <td>{{ stat.views }}</td>
         <td>{{ stat.users }}</td>
         <td>{{ stat.viewsPerUser }}</td>
-        <td>{{stat.totalTimeSpentMinutes}}
-        
+        <td>{{stat.totalTimeSpentMinutes}} 
       </tr>
     </ng-template>
   </p-table>
@@ -58,7 +50,7 @@
       <div class="card">
         <h5>Events Details</h5>
       
-        <!-- URL Filter Dropdown -->
+      
         <p-dropdown 
           [options]="urls" 
           [(ngModel)]="selectedUrl" 
@@ -66,7 +58,7 @@
           (onChange)="onUrlFilterChange1()">
         </p-dropdown>
       
-        <!-- Horizontal Bar Chart for Top Events -->
+      
         <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
       </div>
       
@@ -97,11 +89,10 @@
             </tr>
           </ng-template>
         </p-table>
-      </div>
-      
+      </div>  
       </p-tabPanel>
 
-   <!-- Analytics Data Tab -->
+
    <p-tabPanel header="Sessions">
     <h3>Sessions</h3>
 
@@ -164,12 +155,8 @@
    
     <div class="card">
       <h5>Time Spent on Page</h5>
-      <div id="pieChart" style="width: 65vw; height: 500px;"></div> <!-- Increased height -->
+      <div id="pieChart" style="width: 65vw; height: 500px;"></div> 
     </div>
-    
-    
-    
-    
   </p-tabPanel>
 
   <p-tabPanel header="Path Analysis">

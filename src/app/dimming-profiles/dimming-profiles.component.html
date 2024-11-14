@@ -1,10 +1,8 @@
 <div class="dimming-profiles-container">
-  <!-- Add New Profile Button -->
   <div class="button-group">
     <p-button id="addProfileBtn" label="Add New Profile" icon="pi pi-plus" (click)="showSidebar()"></p-button>
   </div>
 
-  <!-- Table for displaying profiles -->
   <div class="profiles-list p-mt-4">
  
     <p-table [value]="dimmingProfiles" responsiveLayout="scroll" class="compact-table">
@@ -40,12 +38,10 @@
     </p-table>
   </div>
 
-  <!-- Sidebar Form -->
   <p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" position="right" [style]="{'width':'50%'}">
     <div class="profile-details">
       <h3 class="profile-heading">{{ newProfile.id ? 'Edit Profile' : 'Add New Profile' }}</h3>
 
-      <!-- Profile Form -->
       <table class="form-table compact-form">
         <tr>
           <td><label for="profileName">Profile Name*</label></td>
@@ -110,7 +106,6 @@
         </tr>
       </table>
 
-      <!-- Buttons -->
       <div class="button-group">
         <p-button id="resetProfileBtn" label="Reset" (click)="resetProfile()" class="p-button-secondary"></p-button>
         <p-button id="saveProfileBtn" label="Save Profile" (click)="saveProfile()" class="p-button-secondary"></p-button>

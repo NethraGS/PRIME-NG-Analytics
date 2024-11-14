@@ -15,7 +15,7 @@ interface Streetlight {
   operationalTime: string;
   lastMaintenance: string;
   issues: string[];
-  location: string; // Add location property
+  location: string;
 }
 
 

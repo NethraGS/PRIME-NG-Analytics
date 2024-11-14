@@ -30,13 +30,13 @@ export class BreadcrumbComponent implements OnInit {
         this.breadcrumbItems = [{ label: 'Dashboard', routerLink: ['/dashboard'] }];
     
         if (url.includes('/mapview')) {
-            //this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/mapview'] });
+           
             this.breadcrumbItems.push({ label: 'MapView', routerLink: ['/mapview'] });
         } else if (url.includes('/assets')) {
-            //this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/assets'] });
+            
             this.breadcrumbItems.push({ label: 'Asset Table', routerLink: ['/assets'] });
         } else if (url.includes('/scheduler')) {
-            //this.breadcrumbItems.push({ label: 'Assets', routerLink: ['/scheduler'] });
+           
             if (url.includes('/dimming-profiles')) {
                 this.breadcrumbItems.push({ label: 'Scheduler', routerLink: ['/scheduler'] });
                 this.breadcrumbItems.push({ label: 'Dimming Profiles', routerLink: ['/scheduler/dimming-profiles'] });
@@ -45,7 +45,7 @@ export class BreadcrumbComponent implements OnInit {
                 this.breadcrumbItems.push({ label: 'Dimming Schedules', routerLink: ['/scheduler/dimming-schedules'] });
             }
         } else if (url.includes('/charts')) {
-           // this.breadcrumbItems.push({ label: 'Others', routerLink: ['/charts'] });
+         
             this.breadcrumbItems.push({ label: 'Charts', routerLink: ['/charts'] });
         }
     }

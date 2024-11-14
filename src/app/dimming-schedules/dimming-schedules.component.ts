@@ -70,7 +70,6 @@ export class DimmingSchedulesComponent implements OnInit {
 
   ngOnInit() {
     this.loadExistingSchedules();
-    //this.viewCalendar();
   }
 
   loadExistingSchedules() {
