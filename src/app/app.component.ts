@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from './UserService';
-import { TrackingService } from './tracking.service';
+import { UserService } from './SM-Auth/auth.service';
+import { TrackingService } from './SM-Analytics/sm-analytics.service';
 import { PrimeNGConfig } from 'primeng/api';
 
 @Component({

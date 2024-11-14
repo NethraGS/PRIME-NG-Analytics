@@ -23,22 +23,11 @@ import { ChartModule } from 'primeng/chart';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { TrackingService } from './tracking.service';
-import { TrackingInterceptor } from 'src/assets/tracking.interceptor';
+import { TrackingService } from './SM-Analytics/sm-analytics.service';
+import { TrackingInterceptor } from 'src/app/SM-Analytics/sm-analytics.interceptor';
 
 import { Router, NavigationEnd } from '@angular/router';
 
-/*function initializeTracking(userActivityTrackerService: UserActivityTrackerService, router: Router) {
-  return () => {
-    // Listen for global navigation events
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        const pageName = event.urlAfterRedirects;
-        userActivityTrackerService.trackPageNavigation(pageName);
-      }
-    });
-  };
-} */
 
 @NgModule({
     declarations: [
@@ -71,15 +60,10 @@ import { Router, NavigationEnd } from '@angular/router';
         ProductService,
         {
           provide: HTTP_INTERCEPTORS,
-          useClass: TrackingInterceptor, // Register the interceptor
+          useClass: TrackingInterceptor, 
           multi: true
         },
-        /*{
-            provide: APP_INITIALIZER,
-            useFactory: initializeTracking,
-            deps: [UserActivityTrackerService, Router],
-            multi: true
-        }*/
+       
     ],
     bootstrap: [AppComponent]
 })

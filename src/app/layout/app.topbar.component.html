@@ -23,7 +23,7 @@
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
        
         
-        <!-- Show Analytics Page for ADMIN only -->
+        <!-- Analytics Page for ADMIN only -->
         <ng-container *ngIf="userRole === 'ADMIN'">
             <button class="p-link layout-topbar-button" [routerLink]="['/analytics']"
                     pTooltip="Analytics Page"
@@ -34,7 +34,7 @@
           </ng-container>
           
   
-        <!-- Show User Profile for USER only -->
+        <!--User Profile for USER only -->
         <ng-container *ngIf="userRole === 'USER'">
             <button class="p-link layout-topbar-button" [routerLink]="'/user-profile/' + userId" 
                     pTooltip="User Profile" 
@@ -44,7 +44,6 @@
             </button>
         </ng-container>
   
-        <!-- Logout Button -->
         <button id="logout" class="p-link layout-topbar-button" (click)="logout()" 
                 pTooltip="Logout" 
                 tooltipPosition="bottom">

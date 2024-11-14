@@ -2,15 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DimmingProfilesComponent } from '../dimming-profiles/dimming-profiles.component';
 import { MapviewComponent } from '../map-view/map-view.component';
-import { PanelModule } from 'primeng/panel'; // Panel as a widget container
+import { PanelModule } from 'primeng/panel'; 
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { TableModule } from 'primeng/table';
 import { MenuModule } from 'primeng/menu';
 import { ChartModule } from 'primeng/chart';
 import { MenuItem } from 'primeng/api';
-import { ProductService } from '../demo/service/product.service';
+import { ProductService } from 'src/app/demo/service/product.service';
 import { Subscription, debounceTime } from 'rxjs';
-import { Product } from '../demo/api/product';
+import { Product } from 'src/app/demo/api/product';
 import { DimmingSchedulesComponent } from '../dimming-schedules/dimming-schedules.component';
 
 @Component({

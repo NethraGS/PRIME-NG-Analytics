@@ -2,16 +2,16 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from './layout/app.layout.component';
-import { LoginComponent } from './login/login.component';
-import { MapviewComponent } from './map-view/map-view.component';
-import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
-import { DimmingProfilesComponent } from './dimming-profiles/dimming-profiles.component';
-import { DimmingSchedulesComponent } from './dimming-schedules/dimming-schedules.component';
+import { LoginComponent } from './SM-Auth/login/login.component';
+import { MapviewComponent } from './SM-Application/map-view/map-view.component';
+import { UserDashboardComponent } from './SM-Application/user-dashboard/user-dashboard.component';
+import { DimmingProfilesComponent } from './SM-Application/dimming-profiles/dimming-profiles.component';
+import { DimmingSchedulesComponent } from './SM-Application/dimming-schedules/dimming-schedules.component';
 import { ChartsDemoComponent } from './demo/components/uikit/charts/chartsdemo.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { AnalyticsComponent } from './analytics/analytics.component';
-import { AssetTableComponent } from './asset-table/asset-table.component';
-import { AuthGuard } from './auth-guard.guard';  
+import { UserProfileComponent } from './SM-Application/user-profile/user-profile.component';
+import { AnalyticsComponent } from './SM-Analytics/analytics/analytics.component';
+import { AssetTableComponent } from './SM-Application/asset-table/asset-table.component';
+import { AuthGuard } from './SM-Auth/auth-guard.guard';  
 
 @NgModule({
   imports: [

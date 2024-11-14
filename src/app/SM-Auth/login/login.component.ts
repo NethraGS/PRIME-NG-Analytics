@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { PasswordModule } from 'primeng/password';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../UserService';
+import { UserService } from '../auth.service';
 
 interface LoginResponse {
   userId: string;
@@ -50,14 +50,9 @@ export class LoginComponent {
         this.userService.userId = response.userId; 
         this.userService.userRole = response.role;
 
-        // Start session tracking
         this.userService.startSession();
 
-        // Store authentication token and user info
-       // sessionStorage.setItem('authToken', response.token);
-       // sessionStorage.setItem('userId', response.userId);
-
-        // Redirect based on role
+   
         if (response.role === 'ADMIN') {
           this.router.navigate(['/dashboard']);
         } else {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../UserService';
+import { UserService } from '../../SM-Auth/auth.service';
 
 interface User {
   username: string;

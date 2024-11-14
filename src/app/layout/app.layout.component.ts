@@ -5,7 +5,7 @@ import { LayoutService } from "./service/app.layout.service";
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppTopBarComponent } from './app.topbar.component';
 
-import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
+import { BreadcrumbComponent } from '../SM-Application/breadcrumb/breadcrumb.component';
 
 @Component({
     selector: 'app-layout',

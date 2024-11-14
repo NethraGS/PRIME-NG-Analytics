@@ -5,7 +5,7 @@
   </a>
 </div>
 
-<!--right-click context menu -->
+
 <div
   *ngIf="contextMenuVisible"
   class="context-menu"
@@ -21,7 +21,6 @@
 
 </div>
 
-<!-- Sidebar for viewing streetlight details -->
 <div class="sidebar" [class.open]="sidebarVisible">
   <img src="assets/light.png" alt="Company Logo" class="sidebar-logo" />
   <h3>{{ selectedMarkerDetails?.name }} Details</h3>

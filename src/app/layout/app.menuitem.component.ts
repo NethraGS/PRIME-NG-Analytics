@@ -7,7 +7,7 @@ import { MenuService } from './app.menu.service';
 import { LayoutService } from './service/app.layout.service';
 
 @Component({
-    // eslint-disable-next-line @angular-eslint/component-selector
+  
     selector: '[app-menuitem]',
     template: `
 		<ng-container>

@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from './service/app.layout.service';
 import { Router } from '@angular/router';
-import { UserService } from '../UserService';
+import { UserService } from '../SM-Auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({

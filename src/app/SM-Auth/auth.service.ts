@@ -44,9 +44,8 @@ export class UserService {
       this.sessionId = this.generateSessionId(); 
       this.sessionStartTime = Date.now(); 
       sessionStorage.setItem('sessionId', this.sessionId);  
-     // sessionStorage.setItem('sessionStartTimeL', this.sessionStartTime.toString());  // Store start time
-      this.cookieService.set('sessionId', this.sessionId); // Also store session ID in cookies
-      this.cookieService.set('sessionStartTime', this.sessionStartTime.toString());  // Store start time in cookies
+      this.cookieService.set('sessionId', this.sessionId); 
+      this.cookieService.set('sessionStartTime', this.sessionStartTime.toString()); 
     }
   }
 
@@ -54,16 +53,15 @@ export class UserService {
   endSession() {
     if (this.sessionId && this.sessionStartTime) {
       const sessionDuration = Date.now() - this.sessionStartTime;
-      sessionStorage.setItem('sessionDuration', sessionDuration.toString());  // Store session duration
-      this.cookieService.set('sessionDuration', sessionDuration.toString());  // Store session duration in cookies
+      sessionStorage.setItem('sessionDuration', sessionDuration.toString());  
+      this.cookieService.set('sessionDuration', sessionDuration.toString());  
       this.sessionId = null;
       this.sessionStartTime = null;
-      sessionStorage.removeItem('sessionId');  // Remove from sessionStorage
-      sessionStorage.removeItem('sessionStartTime');  // Remove from sessionStorage
-      this.cookieService.delete('sessionId');  // Remove from cookies
-      this.cookieService.delete('sessionStartTime');  // Remove from cookies
+      sessionStorage.removeItem('sessionId');  
+      sessionStorage.removeItem('sessionStartTime');  
+      this.cookieService.delete('sessionId');  
     }
-  }// Helper function to format the date to yyyy-MM-dd'T'HH:mm:ss
+  }
 formatDate(date: Date): string {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -74,7 +72,6 @@ formatDate(date: Date): string {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 }
 
-// Logout the user
 logout() {
   sessionStorage.setItem('logout', 'true');
 
@@ -97,7 +94,6 @@ logout() {
       }
     );
 
-  // Clear session and authentication data
   this._userId = null;
   this._userRole = null;
   this.endSession();

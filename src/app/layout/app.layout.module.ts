@@ -22,7 +22,7 @@ import {  BreadcrumbModule } from 'primeng/breadcrumb';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { MenubarModule } from 'primeng/menubar';
-import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
+import { BreadcrumbComponent } from '../SM-Application/breadcrumb/breadcrumb.component';
 @NgModule({
     declarations: [
         AppMenuitemComponent,
